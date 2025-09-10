@@ -64,3 +64,7 @@ This document lists the preferred dependencies for Rust projects. When designing
 
 ## Docker
 - bollard
+
+## AVOID
+
+- [List of dependencies to avoid with reasoning]

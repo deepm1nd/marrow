@@ -70,6 +70,14 @@ The following outline should be used as the structure for any `*_architecture_sp
 ##### 4.3.14.4. Visual Design & Style Guide (Overview): Key elements of the visual design, such as color palette, typography, and iconography, or a reference to a detailed style guide.
 #### 4.3.15. Component Responsibility Collaborator (CRC) Cards: A collection of CRC cards for the key components, detailing their responsibilities and collaborators.
 #### 4.3.16. Sequence Diagrams: UML Sequence Diagrams for key scenarios to illustrate how components interact to fulfill a use case.
+#### 4.3.17. Logging and Monitoring
+- **Logging Strategy:** This section must detail the system-wide logging strategy.
+  - **Log Levels:** The design must incorporate an 8-level logging system: Emergency, Alert, Critical, Error, Warning, Notice, Informational, Debug.
+  - **Default Level:** The default logging level at application launch must be `NOTICE`.
+  - **Configuration:** The logging level must be configurable at launch (e.g., via environment variables or command-line arguments).
+  - **Output:** Logs should be directed to the console (stdout/stderr).
+  - **Formatting:** Where possible, logs should be color-coded by severity level for improved readability.
+- **Monitoring Strategy:** Outline the approach for monitoring the system's health and performance, including key metrics to track.
 
 ### 4.4. External Interfaces & Integrations
 #### 4.4.1. External System Interfaces: Descriptions of how the system interacts with external systems or APIs.

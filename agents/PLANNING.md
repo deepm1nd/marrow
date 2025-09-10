@@ -100,6 +100,11 @@ This is the core of the development plan. For each phase, provide a detailed lis
 - **Integration Test Plan:** Describe how major components will be tested together, including which interfaces need mocking or contract tests.
 - **System & Acceptance Test Plan:** Translate the Acceptance Criteria from the Design phase into a concrete set of test cases. This includes specifying the required test data, environment setup, and whether the test will be automated or performed manually.
 
+### 5.9. Logging Strategy
+- The development plan must include a strategy for logging.
+- This strategy should be planned in the design phase and implemented during development.
+- The plan should specify how to handle the 8-level logging system.
+
 ---
 
 ## Appendix R - Revision History

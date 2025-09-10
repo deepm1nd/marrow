@@ -66,6 +66,12 @@ To ensure a consistent and reproducible development environment, dependency mana
 - The main prompt and handoff files should always be placed in the repo root.
 - The Rust workspace should be in a folder like `[projectname]/` in the repo root, with the Rust source code in the `src/` folder as per Rust best practices for folder structure.
 
+### 5.4. Logging
+- **Implementation:** The agent must implement the 8-level logging system as defined in the `Architecture Specification`.
+- **Instrumentation:** Code should be instrumented with appropriate log messages at each level. Use `Debug` for detailed development-time information and `Notice` for significant but normal runtime events. Critical, Error, and Warning levels should be used for their respective conditions.
+- **Configuration:** The implementation must allow the log level to be set at launch, defaulting to `NOTICE`.
+- **Console Output:** All logs should be written to the console, and color-coding should be implemented to differentiate log levels.
+
 ## 6. Quality and Completeness for Development
 ### 6.1. Build Early, Build Often Principle
 - The agent must insist on a "build early, build often" approach throughout the development process.

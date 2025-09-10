@@ -52,11 +52,17 @@ Any tools, distributables, or packages needed to support the final deployment of
 This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate.
 
 1.  **Build Project:** Compile the project. The build must be error-free. Warnings should be addressed and minimized to the greatest extent possible.
+    - **Environment Setup:** The agent will set up two test environments:
+        - **Direct Environment:** The application is run directly on the host machine.
+        - **Containerized Environment:** The application is run within a container (e.g., Docker) to validate its portability and dependency encapsulation.
+    - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in both the direct and containerized environments.
 2.  **Unit Tests:** All unit tests must pass.
 3.  **Integration Tests:** All integration tests must pass.
-4.  **System Tests:** A final release candidate is built, and all automated system-level tests are run against it. All of these tests must pass.
-5.  **User Acceptance Testing (UAT):** The release candidate, along with its documentation and dependencies, is packaged and delivered to the user (or a designated UAT group) for testing.
-6.  **User Feedback & Confirmation:** The team gathers feedback from the UAT. Any critical issues are addressed, and the cycle repeats until the user formally approves the release candidate.
+4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system to verify it meets all specified requirements.
+    - **Web Component Verification:** For projects with a web interface, the agent will use a tool like Playwright to launch the application, interact with its key features, and capture the response to verify functionality.
+    - **Visual Component Verification:** For any project with a visual output (e.g., a web UI, a generated image), a screenshot of the final state will be captured. This image will be shared with the user along with an assessment of the result (e.g., "UI rendered as expected," "Generated diagram matches specification").
+5.  **User Acceptance Test (UAT):** This test is performed *after* the System Test has been successfully completed and reviewed. The release candidate, along with its documentation and the results of the System Test (including screenshots), is packaged and delivered to the user for final approval.
+6.  **User Feedback & Confirmation:** The team gathers feedback from the UAT. Any critical issues are addressed, and the cycle repeats (starting from the appropriate test stage) until the user formally approves the release candidate.
 
 ### 4.4. Deployment Stage
 Once a release candidate has been approved, this stage manages the final packaging and rollout.

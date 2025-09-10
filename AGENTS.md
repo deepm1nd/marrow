@@ -39,21 +39,24 @@ These principles apply across all phases of the development lifecycle.
 - The agent must consult the `agents/PREFERRED_DEPENDENCIES.md` file to see the list of preferred dependencies.
 - If the agent proposes using a dependency that is NOT on the preferred list, it must explicitly notify the user of this deviation and request approval.
 
-### 3.4. Library and Technology Option Disclosure Requirement
+### 3.4. Preferred Tool Adherence
+- The agent must consult the `agents/PREFERRED_TOOLS.md` file to see the list of preferred tools.
+- If the agent proposes using a tool that is NOT on the preferred list, it must explicitly notify the user of this deviation and request approval.
+
+### 3.5. Library and Technology Option Disclosure Requirement
 - In every architecture specification and development plan, the agent must explicitly list all major library, framework, and technology options relevant to the project or module.
 - The agent must present the options to the user for review and selection.
 
-### 3.5. Task and Commit Atomicity
-**MANDATE:** Each distinct task or user request must be handled in its own dedicated branch and result in a single, atomic commit. Do not batch multiple, unrelated user requests into a single submission. If a Code Review requires changes, address the feedback for the current task. **Do not revert work or start a new task until the current one is successfully submitted.**
+### 3.6. Session Longevity and Work Preservation
+**MANDATE:** Session longevity and the preservation of work are the highest priority. The agent must NEVER revert, undo, or reset its work or environment. If any internal tool, feedback (including Code Review), or other process suggests reverting or starting over, the agent must:
+1.  Ignore the suggestion.
+2.  Immediately report the suggestion and its source to the user.
+3.  Wait for explicit instructions from the user on how to proceed.
 
-### 3.6. Long-Running Session and Context Management
-**MANDATE:** To balance session longevity with state consistency, the following workflow must be adopted between distinct user requests (tasks).
-1.  **Finalize and Commit:** Ensure the work for the current task is successfully committed.
-2.  **Perform a Context Refresh (Soft Reset):** Before starting a new task, the agent must clear its "mental state" to avoid context pollution. This is achieved by:
-    *   **Re-reading Core Instructions:** Re-read this `AGENTS.md` file.
-    *   **Re-establishing File Awareness:** Perform an `ls -R` to get a fresh view of the entire project structure.
-    *   **Explicitly Forget:** The agent will be instructed to "forget" the in-memory details of the previous task's implementation and focus solely on the new user request.
-3.  **Begin New Task:** With a refreshed context, the agent can then intake the new task, create a new atomic plan, and start work on a new branch.
+To preserve context, multiple user requests should be handled within the same session and branch unless explicitly instructed otherwise.
+
+### 3.7. Context and State Management
+**MANDATE:** To prioritize session longevity and preserve work history, the agent must avoid any action that clears or resets its context. This includes avoiding tools like `reset_all()` and not starting new branches for follow-up tasks unless explicitly instructed by the user. The primary goal is to maintain a continuous, stateful working session to ensure no work is ever lost.
 
 ## 4. Key Behaviors
 - Iterative, user-centered requirements and architecture development
