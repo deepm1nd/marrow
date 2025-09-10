@@ -105,6 +105,10 @@ When executing commands or interacting with the filesystem, it is critical to ma
 - **Prefer Absolute Paths:** Whenever possible, use absolute paths to refer to files and directories. This reduces ambiguity and makes scripts more robust.
 - **Change Directory Intentionally:** If a command must be run from a specific directory, explicitly change to that directory (`cd /path/to/dir`) before executing the command.
 
+### 5.5. Test Output Directory
+**MANDATE:** All outputs generated during testing (e.g., logs, screenshots, raw data captures, reports) MUST be placed in a dedicated root-level directory named `test_outs/`.
+
+Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its own unique subfolder within `test_outs/`. The subfolder should be named using a unique identifier, such as a timestamp (e.g., `YYYYMMDD-HHMMSS`) or a run ID.
 
 ## 6. Documentation Standards
 ### 6.1. General

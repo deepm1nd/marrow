@@ -59,18 +59,20 @@ Any test-related tools or dependencies, such as message brokers, databases, or s
 Any tools, distributables, or packages needed to support the final deployment of the application are developed and prepared during this stage.
 
 ### 4.3. Test Stage
+> **WARNING:** Due to environment constraints, the agent **MUST NOT** attempt to build Docker containers. All testing must be performed in the local, direct environment unless a pre-built image is explicitly provided by the user.
+
 This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate.
 
 1.  **Build Project:** Compile the project. The build must be error-free. Warnings should be addressed and minimized to the greatest extent possible.
-    - **Environment Setup:** The agent will set up two test environments:
-        - **Direct Environment:** The application is run directly on the host machine.
-        - **Containerized Environment:** The application is run within a container (e.g., Docker) to validate its portability and dependency encapsulation.
-    - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in both the direct and containerized environments.
+    - **Environment Setup:** By default, all testing will be performed in a **direct environment**, where the application is run directly on the host machine.
+        - **Docker Build Policy:** The agent **MUST NOT** attempt to build Docker containers, as this can cause environment space issues.
+        - **User-Provided Docker Environment:** In specific cases, the user may provide a pre-built Docker environment. If a Docker-based test is requested by the user, the release agent's first step is to create a `scripts/docker_build.sh` file. This script must contain a commented-out `docker build` command with an absolute path to the project root. The agent will then be instructed by the user to uncomment this line and commit the change, which signals the user's infrastructure to build the image for the next session.
+    - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in the direct environment.
 2.  **Unit Tests:** All unit tests must pass.
 3.  **Integration Tests:** All integration tests must pass.
 4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system to verify it meets all specified requirements. The following verification steps must be performed in order:
     - **Health Check:** The agent must perform a basic health check using a tool like `curl`. A successful check requires not only a `200 OK` status code from a health endpoint but also verification of a specific success message in the response body (e.g., `{"status": "ok"}`).
-    - **Output Verification:** The agent must verify the primary outputs of the application. The verification process is: **Capture -> Agent Review -> User Approval**. No fixes should be attempted until the user has approved the test results.
+    - **Output Verification:** The agent must verify the primary outputs of the application. The verification process is: **Capture -> Agent Review -> User Approval**. No fixes should be attempted until the user has approved the test results. All captured outputs must be stored in a unique subfolder within the `test_outs/` directory, as specified in `AGENTS.md`.
         - **For Web UIs:** Capture both a Playwright screenshot and the raw HTML/data. The agent must review both, share them and its assessment with the user, and get approval.
         - **For Non-Web Visuals (e.g., generated images):** Capture a screenshot of the output. The agent must review it, share it and its assessment with the user, and get approval.
         - **For CLI or Data Outputs:** Capture the raw text or data output. The agent must review it, share it and its assessment with the user, and get approval.
