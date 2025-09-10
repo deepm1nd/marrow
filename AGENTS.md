@@ -77,8 +77,12 @@ To preserve context, multiple user requests should be handled within the same se
 - **Default Values:** Use Sidewinder_Case / UpperCamelCase (e.g., `Default_Value_Name`).
 
 
-### 5.2. Dependency Selection
-When selecting libraries or dependencies, you must perform at least a basic web search for competitive alternatives and choose the best one based on a holistic assessment of the following criteria:
+### 5.2. Dependency and Tool Selection
+When selecting libraries, dependencies, or tools that are not listed in a `PREFERRED_*.md` file, the agent's selection process must be interactive and user-driven.
+
+**MANDATE:** If a desired tool or dependency is not on a preferred list, the agent MUST present the user with its proposed choice along with at least one competitive alternative. This presentation must include a brief discussion of the pros and cons of each option. The agent must then wait for the user to make the final selection before proceeding.
+
+The analysis of alternatives should be based on a holistic assessment of the following criteria:
 - **Maturity:** How long has the library been in development? Is it stable?
 - **Developer Support & Community:** Is there an active community? Is it easy to get help?
 - **Contributors & Repository Activity:** How many contributors are there? Is the repository actively maintained with frequent commits and releases?
