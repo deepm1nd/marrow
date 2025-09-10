@@ -101,9 +101,17 @@ This is the core of the development plan. For each phase, provide a detailed lis
 - **System & Acceptance Test Plan:** Translate the Acceptance Criteria from the Design phase into a concrete set of test cases. This includes specifying the required test data, environment setup, and whether the test will be automated or performed manually.
 
 ### 5.9. Logging Strategy
-- The development plan must include a strategy for logging.
-- This strategy should be planned in the design phase and implemented during development.
-- The plan should specify how to handle the 8-level logging system.
+- The development plan must incorporate the logging strategy defined in the `Architecture Specification`.
+- The plan must include tasks for instrumenting the code with appropriate log messages at all 8 levels:
+    - **Emergency:** The system is unusable.
+    - **Alert:** Action must be taken immediately.
+    - **Critical:** Critical conditions.
+    - **Error:** Error conditions in the system.
+    - **Warning:** A warning condition.
+    - **Notice:** A normal but significant condition. (Default Level)
+    - **Informational:** Informational messages.
+    - **Debug:** Debug-level messages, used for debugging.
+- The plan should account for making the log level configurable at launch.
 
 ---
 

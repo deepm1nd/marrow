@@ -48,8 +48,7 @@ This document lists the preferred dependencies for Rust projects. When designing
 - thiserror
 
 ## Logging
-- log
-- env_logger
+- tracing
 
 ## Utilities
 - rand
@@ -67,4 +66,4 @@ This document lists the preferred dependencies for Rust projects. When designing
 
 ## AVOID
 
-- [List of dependencies to avoid with reasoning]
+- [No dependencies to avoid have been specified yet.]

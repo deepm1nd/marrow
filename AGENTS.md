@@ -69,7 +69,12 @@ To preserve context, multiple user requests should be handled within the same se
 - Support for multi-agent or multi-chat execution of tasks
 
 ## 5. Development Conventions
-### 5.1. Naming Conventions
+### 5.1. Programming Language Mandate
+**MANDATE:** The primary and preferred language for all development is **Rust**. The use of any other programming or scripting language (e.g., Python, JavaScript, Go, Bash) for any part of the project, including build scripts, tests, or supporting tools, requires a clear justification and explicit user approval before implementation.
+
+This restriction does not apply to declarative languages such as HTML and CSS.
+
+### 5.2. Naming Conventions
 - **File and Folder Names:** Use snake_case (e.g., `my_folder_name/`, `my_file_name.md`).
 - **Branch Names:** Use kebab-case (e.g., `feature/add-user-authentication`).
 - **Variables and Parameters:** Use snake_case (e.g., `my_variable_name`).
@@ -77,7 +82,9 @@ To preserve context, multiple user requests should be handled within the same se
 - **Default Values:** Use Sidewinder_Case / UpperCamelCase (e.g., `Default_Value_Name`).
 
 
-### 5.2. Dependency and Tool Selection
+### 5.3. Dependency and Tool Selection
+When selecting libraries or dependencies (crates), the agent should refer to https://blessed.rs/crates for guidance on recommended and well-maintained options.
+
 When selecting libraries, dependencies, or tools that are not listed in a `PREFERRED_*.md` file, the agent's selection process must be interactive and user-driven.
 
 **MANDATE:** If a desired tool or dependency is not on a preferred list, the agent MUST present the user with its proposed choice along with at least one competitive alternative. This presentation must include a brief discussion of the pros and cons of each option. The agent must then wait for the user to make the final selection before proceeding.
@@ -92,7 +99,7 @@ The analysis of alternatives should be based on a holistic assessment of the fol
     - **Feature Set:** Does it provide the necessary features for the task?
 
 
-### 5.3. Filesystem and Execution Environment
+### 5.4. Filesystem and Execution Environment
 When executing commands or interacting with the filesystem, it is critical to maintain awareness of the current working directory and file paths to prevent common errors.
 - **Verify Your Location:** Before running build scripts or commands that depend on the current directory, always verify your location using a command like `pwd`.
 - **Prefer Absolute Paths:** Whenever possible, use absolute paths to refer to files and directories. This reduces ambiguity and makes scripts more robust.
