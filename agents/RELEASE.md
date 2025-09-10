@@ -70,7 +70,7 @@ This stage is an iterative cycle of `test -> correct -> repeat` with the goal of
     - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in the direct environment.
 2.  **Unit Tests:** All unit tests must pass.
 3.  **Integration Tests:** All integration tests must pass.
-4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system to verify it meets all specified requirements. The following verification steps must be performed in order:
+4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system. The agent must first launch the application in the background (e.g., `cargo run ... &`) and then, in a separate step, run the tests against the live application. The build and test steps must not be combined in a single script. The following verification steps must be performed in order:
     - **Health Check:** The agent must perform a basic health check using a tool like `curl`. A successful check requires not only a `200 OK` status code from a health endpoint but also verification of a specific success message in the response body (e.g., `{"status": "ok"}`).
     - **Output Verification:** The agent must verify the primary outputs of the application. The verification process is: **Capture -> Agent Review -> User Approval**. No fixes should be attempted until the user has approved the test results. All captured outputs must be stored in a unique subfolder within the `test_outs/` directory, as specified in `AGENTS.md`.
         - **For Web UIs:** Capture both a Playwright screenshot and the raw HTML/data. The agent must review both, share them and its assessment with the user, and get approval.
