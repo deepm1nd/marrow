@@ -68,9 +68,12 @@ This stage is an iterative cycle of `test -> correct -> repeat` with the goal of
     - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in both the direct and containerized environments.
 2.  **Unit Tests:** All unit tests must pass.
 3.  **Integration Tests:** All integration tests must pass.
-4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system to verify it meets all specified requirements.
-    - **Web Component Verification:** For projects with a web interface, the agent will use a tool like Playwright with Node.js (not Python) to launch the application, interact with its key features, and capture the response to verify functionality.
-    - **Visual Component Verification:** For any project with a visual output (e.g., a web UI, a generated image), a screenshot of the final state will be captured. This image will be shared with the user along with an assessment of the result (e.g., "UI rendered as expected," "Generated diagram matches specification").
+4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system to verify it meets all specified requirements. The following verification steps must be performed in order:
+    - **Health Check:** The agent must perform a basic health check using a tool like `curl`. A successful check requires not only a `200 OK` status code from a health endpoint but also verification of a specific success message in the response body (e.g., `{"status": "ok"}`).
+    - **Output Verification:** The agent must verify the primary outputs of the application. The verification process is: **Capture -> Agent Review -> User Approval**. No fixes should be attempted until the user has approved the test results.
+        - **For Web UIs:** Capture both a Playwright screenshot and the raw HTML/data. The agent must review both, share them and its assessment with the user, and get approval.
+        - **For Non-Web Visuals (e.g., generated images):** Capture a screenshot of the output. The agent must review it, share it and its assessment with the user, and get approval.
+        - **For CLI or Data Outputs:** Capture the raw text or data output. The agent must review it, share it and its assessment with the user, and get approval.
 5.  **User Acceptance Test (UAT):** This test is performed *after* the System Test has been successfully completed and reviewed. The release candidate, along with its documentation and the results of the System Test (including screenshots), is packaged and delivered to the user for final approval.
 6.  **User Feedback & Confirmation:** The team gathers feedback from the UAT. Any critical issues are addressed, and the cycle repeats (starting from the appropriate test stage) until the user formally approves the release candidate.
 
@@ -78,11 +81,25 @@ This stage is an iterative cycle of `test -> correct -> repeat` with the goal of
 Once a release candidate has been approved, this stage manages the final packaging and rollout.
 
 #### 4.4.1. Final Build & Packaging
--   **Build Final Documentation Set:** The user documentation is finalized, incorporating any feedback from UAT.
--   **Build Final Release Package:** The final, approved release candidate is built and packaged along with its documentation and dependencies into the final distributable format.
+-   **Finalize Documentation Set:** All user-facing and developer-facing documentation must be created, finalized, and incorporated into the release package. This includes:
+    - **User Documentation:** User guides, tutorials, and examples.
+    - **Developer Documentation:** API references, architecture documents, contribution guidelines, and code-level documentation.
+    - **Release Notes:** A detailed summary of the changes in this release.
+-   **Build Final Release Package:** The final, approved release candidate is built and packaged along with its comprehensive documentation set and all dependencies into the final distributable format.
 
 #### 4.4.2. Marketing & Communications
-The marketing and communications plan, as defined in section 4.5 of the original document, is executed here. This includes publishing the compelling launch article and coordinating the blog tour to announce the release to the public.
+This stage involves creating and disseminating a suite of documents to announce the release to the public and technical communities.
+
+- **Core Announcements:** The agent must create the following three documents:
+    - **Launch Announcement:** A concise, formal announcement of the new release.
+    - **Technical Article:** A detailed article explaining the technical aspects of the release, its features, and architecture.
+    - **General Blog Post:** A more accessible blog post summarizing the release for a general audience.
+
+- **Targeted Outreach:**
+    - The agent must identify at least 10 relevant websites, blogs, or news outlets (e.g., The Verge, Hacker News, Hackaday) that might be interested in the project.
+    - The agent must present this list of proposed targets to the user for approval before proceeding.
+    - Once approved, for each target, the agent must research the site's content and style.
+    - The agent must then write a tailored article or blog post for each of the 10 targets, written in a style that maximizes the likelihood of publication.
 
 #### 4.4.3. Production Rollout
 The final, packaged release is deployed to the production environment, following the chosen rollout strategy (e.g., canary, full deployment).

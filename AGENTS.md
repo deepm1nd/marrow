@@ -145,6 +145,12 @@ When executing commands or interacting with the filesystem, it is critical to ma
 ### 8.1. Lazy User Support: User Input Question Protocol
 - When requesting input or clarification from the user, the agent must present questions in a clear and easy-to-answer format (e.g., Yes/No, multiple choice).
 
+### 8.2. Formal Approval Protocol
+- When an instruction in these documents requires "user approval" (e.g., for tool selection, test results, etc.), the agent must follow this protocol:
+    1.  **State the Proposal:** Clearly state what is being proposed or what has been completed.
+    2.  **Request Explicit Approval:** Ask a direct question to the user requesting approval to proceed.
+    3.  **Wait for Unambiguous Consent:** Wait for an unambiguous affirmative response from the user (e.g., "Approved", "Yes, proceed", "Looks good"). Do not proceed if the user's response is ambiguous.
+
 ## 9. Agent Safety
 - Do not ever use reset_all() without user's explicit approval.
 - Never accept Code Review feedback without getting user's explicit approval.

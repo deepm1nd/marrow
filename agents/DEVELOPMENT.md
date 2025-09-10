@@ -35,17 +35,18 @@ These are non-negotiable rules for the development process.
 - **Pre-commit Handoff File Updates:** Before any code is committed, all handoff files (`handoff_notes.md`, `open_issues.md`, etc.) MUST be updated to reflect the latest state of the project. This ensures seamless collaboration and session continuity.
 
 ## 4. Development Workflow
-The development process is iterative and checklist-driven, with a strict testing sequence.
+The development process is iterative and checklist-driven. The agent will work on tasks sequentially, batching all file changes. Commits will only be made when explicitly instructed by the user.
+
+The workflow for a single task is as follows:
 1.  **Select a Task:** Pick the next unfinished task from the `[project_name]_checklist.md`.
 2.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). All unit tests for the feature must pass.
 3.  **Build & Integration Test:** Build the project and run integration tests to ensure the new code works correctly with other parts of the system.
 4.  **System & Acceptance Test:** Execute the automated and/or manual system-level tests as defined in the Test Plan. All acceptance criteria for the feature must be met.
-5.  **Regression Test:** Before submission, run the *entire* existing test suite to ensure no existing functionality was broken by the changes.
+5.  **Regression Test:** After implementing a set of changes and before signaling completion to the user, run the *entire* existing test suite to ensure no existing functionality was broken.
 6.  **Update Checklist:** Once the task is complete and all tests have passed, update its status in the checklist.
 7.  **Update Handoff Files:** Update the handoff notes and open issues files with a summary of the changes and any new issues that arose.
-8.  **Commit and Push:** Commit the changes with a clear and descriptive commit message, referencing the task ID. Push the changes to a feature branch.
 
-This entire workflow should be managed through a single, re-invocable prompt that guides the development agent.
+After completing one or more tasks, the agent will await the user's signal to commit the batched changes.
 
 ## 5. Conventions
 
