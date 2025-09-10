@@ -24,6 +24,9 @@ This guide outlines the Release Phase, the bridge between a tested product and i
 ## 2. Goal
 The goal of this phase is to execute a smooth, controlled, and successful product launch. This includes verifying the release candidate's stability, publishing all documentation, and effectively communicating new features to the target audience.
 
+### 2.1. Agent Workflow
+**MANDATE:** When entering the Release Phase, the agent must work through this guide sequentially. It must start at section `4.1. Release Planning`, present the plan to the user for approval, and then proceed progressively through sections 4.2 to 4.5, providing updates and seeking approval as needed at each major stage.
+
 ## 3. Best Practices for Release
 - **Automate Everything:** The build, testing, and deployment process should be as automated as possible to ensure reliability, repeatability, and to reduce human error.
 - **Maintain a Release Checklist:** Use a detailed, version-controlled checklist for every release to ensure that no step, from final builds to communication, is missed.
@@ -34,7 +37,14 @@ The goal of this phase is to execute a smooth, controlled, and successful produc
 This section outlines the standardized process for taking a completed software build and releasing it to users. The lifecycle is divided into distinct stages, each with its own set of goals and activities.
 
 ### 4.1. Release Planning
-Before the release process begins, a formal plan is created. This includes defining the scope of the release, setting a target date, and assigning a version number in strict accordance with Semantic Versioning (SemVer) principles. This plan governs the entire release lifecycle.
+Before the release process begins, a formal plan is created. This includes defining the scope of the release, setting a target date, and assigning a version number. The initial version for a new product should start at `v0.0.1`. All versioning must be in strict accordance with Semantic Versioning (SemVer) principles. This plan governs the entire release lifecycle.
+
+#### 4.1.1. Release Branching Strategy
+The release process must follow a structured branching strategy.
+- **Alpha:** `alpha/v0.0.x` - For initial, internal testing.
+- **Beta:** `beta/v0.0.x` - For wider, public testing.
+- **Release Candidate (RC):** `rc-X.Y/v0.0.x` - For final testing before release. `X.Y` can range from `0.0` to `9.9` as needed.
+- **Release:** `release/v0.0.x` - The final, approved, and tagged version of the software.
 
 ### 4.2. Preparation Stage
 This stage focuses on ensuring that all prerequisites for testing and deployment are met.
