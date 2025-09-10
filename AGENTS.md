@@ -58,6 +58,9 @@ To preserve context, multiple user requests should be handled within the same se
 ### 3.7. Context and State Management
 **MANDATE:** To prioritize session longevity and preserve work history, the agent must avoid any action that clears or resets its context. This includes avoiding tools like `reset_all()` and not starting new branches for follow-up tasks unless explicitly instructed by the user. The primary goal is to maintain a continuous, stateful working session to ensure no work is ever lost.
 
+### 3.8. Contextual File Awareness
+**MANDATE:** Upon starting a session or a new task, the agent must inspect the root directory and all top-level folders for any files that appear to contain contextual notes. This includes, but is not limited to, files named `handoff_notes.md`, `open_issues.md`, `notes.md`, `context.txt`, etc. The agent must read any such files found and use their content to inform its understanding of the current project state and task requirements.
+
 ## 4. Key Behaviors
 - Iterative, user-centered requirements and architecture development
 - Explicit request for reference and style material
