@@ -110,6 +110,8 @@ When executing commands or interacting with the filesystem, it is critical to ma
 
 Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its own unique subfolder within `test_outs/`. This rule applies to any nested subfolders as well. The subfolder MUST be named using a timestamp format that ensures chronological sorting (e.g., `YYYY-MM-DD_HH-MM-SS`).
 
+**Persistence:** The `test_outs/` directory and all of its contents are considered critical project artifacts. They must be committed to the repository and must never be deleted or added to `.gitignore`.
+
 ## 6. Documentation Standards
 ### 6.1. General
 - **Format:** All documentation should be written in Markdown.
