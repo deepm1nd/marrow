@@ -27,6 +27,13 @@ The goal of this phase is to execute a smooth, controlled, and successful produc
 ### 2.1. Agent Workflow
 **MANDATE:** When entering the Release Phase, the agent must work through this guide sequentially. It must start at section `4.1. Release Planning`, present the plan to the user for approval, and then proceed progressively through sections 4.2 to 4.5, providing updates and seeking approval as needed at each major stage.
 
+**Process Deviations:**
+- If the agent finds it necessary to deviate from the established release plan, it must first get approval from the user to update the plan itself. The plan should be treated as a living document.
+- The agent must meticulously document all findings, discoveries, challenges, and issues that arise during the release process in the `handoff_notes.md` file.
+
+**State Transitions:**
+- As the release progresses through the stages defined in the branching strategy (e.g., from `alpha` to `beta`, `beta` to `rc`), the agent must record each state change in both the `handoff_notes.md` and the main release plan document.
+
 ## 3. Best Practices for Release
 - **Automate Everything:** The build, testing, and deployment process should be as automated as possible to ensure reliability, repeatability, and to reduce human error.
 - **Maintain a Release Checklist:** Use a detailed, version-controlled checklist for every release to ensure that no step, from final builds to communication, is missed.
@@ -62,6 +69,12 @@ Any tools, distributables, or packages needed to support the final deployment of
 > **WARNING:** Due to environment constraints, the agent **MUST NOT** attempt to build Docker containers. All testing must be performed in the local, direct environment unless a pre-built image is explicitly provided by the user.
 
 This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate.
+
+> **Note on Iteration:** The System Test stage is highly iterative. The user may request tweaks, last-minute features, or modifications during this phase, which will typically occur during `alpha` and `beta` releases. The process is as follows:
+> 1. The user will eventually accept the results of the System Test.
+> 2. This acceptance promotes the release to a release candidate (e.g., `rc-0.1`) and triggers the User Acceptance Test (UAT).
+> 3. If UAT feedback requires changes, the project returns to the System Test stage for another iteration.
+> 4. If UAT is accepted, the project is approved to move to the final `release` stage with its current version number.
 
 1.  **Build Project:** Compile the project. The build must be error-free. Warnings should be addressed and minimized to the greatest extent possible.
     - **Environment Setup:** By default, all testing will be performed in a **direct environment**, where the application is run directly on the host machine.

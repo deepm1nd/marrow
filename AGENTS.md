@@ -108,7 +108,7 @@ When executing commands or interacting with the filesystem, it is critical to ma
 ### 5.5. Test Output Directory
 **MANDATE:** All outputs generated during testing (e.g., logs, screenshots, raw data captures, reports) MUST be placed in a dedicated root-level directory named `test_outs/`.
 
-Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its own unique subfolder within `test_outs/`. The subfolder should be named using a unique identifier, such as a timestamp (e.g., `YYYYMMDD-HHMMSS`) or a run ID.
+Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its own unique subfolder within `test_outs/`. This rule applies to any nested subfolders as well. The subfolder MUST be named using a timestamp format that ensures chronological sorting (e.g., `YYYY-MM-DD_HH-MM-SS`).
 
 ## 6. Documentation Standards
 ### 6.1. General
