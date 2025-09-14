@@ -53,6 +53,8 @@ The release process must follow a structured branching strategy.
 - **Release Candidate (RC):** `rc-X.Y/v0.0.x` - For final testing before release. `X.Y` can range from `0.0` to `9.9` as needed.
 - **Release:** `release/v0.0.x` - The final, approved, and tagged version of the software.
 
+**Note on Session Restarts:** Due to environment limitations, if a new agent session begins by cloning a repository that is already on a target branch (e.g., `alpha/v0.0.1`), the agent must create a new, session-specific branch by appending an incrementing number. For example, `alpha-1/v0.0.1`, `alpha-2/v0.0.1`, and so on.
+
 ### 4.2. Preparation Stage
 This stage focuses on ensuring that all prerequisites for testing and deployment are met.
 
@@ -68,29 +70,27 @@ Any tools, distributables, or packages needed to support the final deployment of
 ### 4.3. Test Stage
 > **WARNING:** Due to environment constraints, the agent **MUST NOT** attempt to build Docker containers. All testing must be performed in the local, direct environment unless a pre-built image is explicitly provided by the user.
 
-This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate.
+This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
 
-> **Note on Iteration:** The System Test stage is highly iterative. The user may request tweaks, last-minute features, or modifications during this phase, which will typically occur during `alpha` and `beta` releases. The process is as follows:
-> 1. The user will eventually accept the results of the System Test.
-> 2. This acceptance promotes the release to a release candidate (e.g., `rc-0.1`) and triggers the User Acceptance Test (UAT).
-> 3. If UAT feedback requires changes, the project returns to the System Test stage for another iteration.
-> 4. If UAT is accepted, the project is approved to move to the final `release` stage with its current version number.
-
-1.  **Build Project:** Compile the project. The build must be error-free. Warnings should be addressed and minimized to the greatest extent possible.
-    - **Environment Setup:** By default, all testing will be performed in a **direct environment**, where the application is run directly on the host machine.
-        - **Docker Build Policy:** The agent **MUST NOT** attempt to build Docker containers, as this can cause environment space issues.
-        - **User-Provided Docker Environment:** In specific cases, the user may provide a pre-built Docker environment. If a Docker-based test is requested by the user, the release agent's first step is to create a `scripts/docker_build.sh` file. This script must contain a commented-out `docker build` command with an absolute path to the project root. The agent will then be instructed by the user to uncomment this line and commit the change, which signals the user's infrastructure to build the image for the next session.
-    - **Documentation:** The agent will provide clear, step-by-step instructions for a user or another agent to replicate the system test in the direct environment.
-2.  **Unit Tests:** All unit tests must pass.
-3.  **Integration Tests:** All integration tests must pass.
-4.  **System Test:** This is a comprehensive, agent-driven test of the fully integrated system. The agent must first launch the application in the background (e.g., `cargo run ... &`) and then, in a separate step, run the tests against the live application. The build and test steps must not be combined in a single script. The following verification steps must be performed in order:
-    - **Health Check:** The agent must perform a basic health check using a tool like `curl`. A successful check requires not only a `200 OK` status code from a health endpoint but also verification of a specific success message in the response body (e.g., `{"status": "ok"}`).
-    - **Output Verification:** The agent must verify the primary outputs of the application. The verification process is: **Capture -> Agent Review -> User Approval**. No fixes should be attempted until the user has approved the test results. All captured outputs must be stored in a unique subfolder within the `test_outs/` directory, as specified in `AGENTS.md`.
-        - **For Web UIs:** Using Playwright with Node.js (not Python), capture both a screenshot and the raw HTML/data. The agent must review both, share them and its assessment with the user, and get approval.
-        - **For Non-Web Visuals (e.g., generated images):** Capture a screenshot of the output. The agent must review it, share it and its assessment with the user, and get approval.
-        - **For CLI or Data Outputs:** Capture the raw text or data output. The agent must review it, share it and its assessment with the user, and get approval.
-5.  **User Acceptance Test (UAT):** This test is performed *after* the System Test has been successfully completed and reviewed. The release candidate, along with its documentation and the results of the System Test (including screenshots), is packaged and delivered to the user for final approval.
-6.  **User Feedback & Confirmation:** The team gathers feedback from the UAT. Any critical issues are addressed, and the cycle repeats (starting from the appropriate test stage) until the user formally approves the release candidate.
+The workflow for this stage is as follows:
+1.  **Test Output Setup:** The agent must create a structured directory for the test outputs corresponding to the current branch, e.g., `test_outs/v0.0.1/alpha-1/`. All subsequent test outputs for this session will be managed within this folder.
+2.  **Initial System Test (Reference Set):** The agent's first task is to run the full system test suite once.
+    - The outputs (logs, screenshots, etc.) are to be stored in a `reference/` subfolder within the session's test output directory.
+    - The agent must then present this reference set to the user for approval before any fixes or feature work begins.
+3.  **Iterative Development & Testing:**
+    - Once the reference set is approved, the user will provide tasks for fixes or features.
+    - The agent will work on these tasks, running tests as needed and generating intermediate test outputs in temporary subfolders.
+    - Once the agent believes a task is complete, it must run a final verification test.
+    - **Cleanup:** The agent must delete all intermediate test outputs from the temporary subfolders.
+    - The final outputs are stored in a `for_approval/` subfolder.
+    - The agent presents the `for_approval/` outputs to the user. The user may approve them or request further changes, continuing the loop.
+4.  **Promotion to UAT:**
+    - At some point, the user will accept the `for_approval/` outputs as final for the current release stage. The user may at this point request that the `for_approval/` set becomes the new `reference/` set for subsequent work.
+    - This acceptance promotes the release to the next stage (e.g., a release candidate, `rc-0.1`), which triggers the User Acceptance Test (UAT).
+5.  **User Acceptance Test (UAT):**
+    - The release candidate is delivered to the user for UAT.
+    - If UAT feedback requires changes, the project returns to step 3 of this Test Stage to begin another iteration.
+    - If UAT is accepted, the project is approved to move to the `4.4. Deployment Stage`.
 
 ### 4.4. Deployment Stage
 Once a release candidate has been approved, this stage manages the final packaging and rollout.
