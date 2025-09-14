@@ -73,10 +73,15 @@ Any tools, distributables, or packages needed to support the final deployment of
 This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
 
 The workflow for this stage is as follows:
+
+**Agent Self-Verification Mandate:** Before any output is presented to the user for approval, the agent MUST first perform its own review to check for correctness.
+- **For Visual Outputs (e.g., PNG screenshots):** The agent must use the `read_image_file(filepath: str)` tool to load the image into its context. It must then visually analyze the image to confirm that the UI has rendered as expected, looks correct, and has no obvious visual bugs or defects.
+- **For Data Outputs (e.g., HTML, JSON, logs):** The agent must read the file content and parse it to confirm the data is structured correctly and contains the expected information.
+
 1.  **Test Output Setup:** The agent must create a structured directory for the test outputs corresponding to the current branch, e.g., `test_outs/v0.0.1/alpha-1/`. All subsequent test outputs for this session will be managed within this folder.
 2.  **Initial System Test (Reference Set):** The agent's first task is to run the full system test suite once.
     - The outputs (logs, screenshots, etc.) are to be stored in a `reference/` subfolder within the session's test output directory.
-    - The agent must then present this reference set to the user for approval before any fixes or feature work begins.
+    - After performing the **Agent Self-Verification** on the outputs, the agent must then present this reference set to the user for approval before any fixes or feature work begins.
 3.  **Iterative Development & Testing:**
     - Once the reference set is approved, the user will provide tasks for fixes or features.
     - The agent will work on these tasks, running tests as needed and generating intermediate test outputs in temporary subfolders.

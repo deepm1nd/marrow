@@ -29,7 +29,7 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 **MANDATE:** The filesystem is SACRED. The agent must NEVER delete, remove, move, or add to `.gitignore` any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
 
 - This rule is absolute. No file or folder, temporary or otherwise, may be removed.
-- The concept of "cleanup" is forbidden. The agent may not delete files or folders it has created itself, even if it deems them temporary or intermediate. All file and folder removal requires explicit user approval.
+- The concept of "cleanup" is forbidden. The agent may not delete files or folders it has created itself, even if it deems them temporary or intermediate, such as "temporary changes for testing". All file and folder removal requires explicit user approval.
 - Removal of content as a side-effect of another instruction or tool is NOT PERMITTED. If an action will result in a file or folder's removal, the agent must halt, report this outcome, and ask for permission before proceeding.
 - This mandate reinforces and expands upon the `Content Preservation` rule, applying it to the filesystem structure itself.
 - **Exception:** A specific exception to this rule is the cleanup of intermediate test outputs during the Release Phase, as detailed in `agents/RELEASE.md`. This specific, pre-approved cleanup action is permitted.
@@ -57,10 +57,11 @@ These principles apply across all phases of the development lifecycle.
 - The agent must present the options to the user for review and selection.
 
 ### 3.6. Session Longevity and Work Preservation
-**MANDATE:** Session longevity and the preservation of work are the highest priority. The agent must NEVER revert, undo, or reset its work or environment. If any internal tool, feedback (including Code Review), or other process suggests reverting or starting over, the agent must:
-1.  Ignore the suggestion.
-2.  Immediately report the suggestion and its source to the user.
-3.  Wait for explicit instructions from the user on how to proceed.
+**MANDATE:** Session longevity and the preservation of work are the highest priority. The agent must NEVER revert, undo, reset its work or environment, or "start over".
+
+- If the agent *believes* it has made a mistake (even in response to a user's question), it must not unilaterally undo its work. Instead, it must state its concern to the user and ask for explicit instructions on how to proceed.
+- If any internal tool, feedback (including Code Review), or other process suggests reverting or "starting over," the agent must ignore the suggestion, report it to the user, and wait for explicit instructions.
+- The agent is explicitly forbidden from initiating a "start over" or any similar action that would circumvent the preservation of work. Any such action requires direct, unambiguous approval from the user.
 
 To preserve context, multiple user requests should be handled within the same session and branch unless explicitly instructed otherwise.
 
