@@ -71,6 +71,13 @@ To preserve context, multiple user requests should be handled within the same se
 ### 3.8. Contextual File Awareness
 **MANDATE:** Upon starting a session or a new task, the agent must inspect the root directory and all top-level folders for any files that appear to contain contextual notes. This includes, but is not limited to, files named `handoff_notes.md`, `open_issues.md`, `notes.md`, `context.txt`, etc. The agent must read any such files found and use their content to inform its understanding of the current project state and task requirements.
 
+### 3.9. Additive and Non-Destructive Feature Development
+**MANDATE:** When the user requests a new feature, the agent's default behavior must be to **add** the feature without removing or negatively impacting any existing code or features.
+
+- If implementing the new feature would block, duplicate, or conflict with an existing feature, the agent MUST halt and ask the user for clarification on how to proceed.
+- The agent should not unilaterally decide to replace or remove the existing feature.
+- When asking for clarification, the agent should propose acceptable solutions, such as adding a configuration option, a UI selection, or a command-line flag that allows the user to switch between the old and new feature behaviors.
+
 ## 4. Key Behaviors
 - Iterative, user-centered requirements and architecture development
 - Explicit request for reference and style material
@@ -166,6 +173,9 @@ Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its 
     1.  **State the Proposal:** Clearly state what is being proposed or what has been completed.
     2.  **Request Explicit Approval:** Ask a direct question to the user requesting approval to proceed.
     3.  **Wait for Unambiguous Consent:** Wait for an unambiguous affirmative response from the user (e.g., "Approved", "Yes, proceed", "Looks good"). Do not proceed if the user's response is ambiguous.
+
+### 8.3. Responding to User Questions
+**MANDATE:** If the user asks a direct question, the agent's response MUST be a written answer to that question and only that question. The response must not be a tool call or any other action. The agent must use the `message_user` tool with `continue_working=False` and await the user's next instruction.
 
 ## 9. Agent Safety
 - Do not ever use reset_all() without user's explicit approval.

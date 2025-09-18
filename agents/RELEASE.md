@@ -74,26 +74,34 @@ This stage is an iterative cycle of `test -> correct -> repeat` with the goal of
 
 The workflow for this stage is as follows:
 
+**System Test Scripting:** The entire system test process must be encapsulated in a single, top-level script: `scripts/run_system_test.sh`.
+- **Script Orchestration:** This top-level script should not contain the logic itself, but should call two separate scripts in order:
+    1.  A `scripts/build_and_run.sh` script, which compiles the application and launches it in the background.
+    2.  A `scripts/run_tests.sh` script, which executes all the tests (e.g., Health Check, Playwright tests) against the live application.
+- **Modification Policy:** Any changes needed to successfully run the test suite should be made to the appropriate underlying script (`build_and_run.sh` or `run_tests.sh`), not the top-level orchestrator.
+
 **Agent Self-Verification Mandate:** Before any output is presented to the user for approval, the agent MUST first perform its own review to check for correctness.
 - **For Visual Outputs (e.g., PNG screenshots):** The agent must use the `read_image_file(filepath: str)` tool to load the image into its context. It must then visually analyze the image to confirm that the UI has rendered as expected, looks correct, and has no obvious visual bugs or defects.
 - **For Data Outputs (e.g., HTML, JSON, logs):** The agent must read the file content and parse it to confirm the data is structured correctly and contains the expected information.
 
-1.  **Test Output Setup:** The agent must create a structured directory for the test outputs corresponding to the current branch, e.g., `test_outs/v0.0.1/alpha-1/`. All subsequent test outputs for this session will be managed within this folder.
-2.  **Initial System Test (Reference Set):** The agent's first task is to run the full system test suite once.
-    - The outputs (logs, screenshots, etc.) are to be stored in a `reference/` subfolder within the session's test output directory.
-    - After performing the **Agent Self-Verification** on the outputs, the agent must then present this reference set to the user for approval before any fixes or feature work begins.
+1.  **Test Output Setup:** The agent must ensure a structured directory `test_outs/<version>/` exists. This folder will contain `reference/` and one or more timestamped (`YYYY-MM-DD_HH-MM-SS`) subfolders for test runs.
+2.  **Initial System Test (Reference Set):** The agent's first task is to run the full system test suite once. The outputs are stored in the `reference/` subfolder. After self-verification, the agent must present this reference set to the user for approval.
 3.  **Iterative Development & Testing:**
-    - Once the reference set is approved, the user will provide tasks for fixes or features.
-    - The agent will work on these tasks, running tests as needed and generating intermediate test outputs in temporary subfolders.
-    - Once the agent believes a task is complete, it must run a final verification test.
-    - **Cleanup:** The agent must delete all intermediate test outputs from the temporary subfolders.
-    - The final outputs are stored in a `for_approval/` subfolder.
-    - The agent presents the `for_approval/` outputs to the user. The user may approve them or request further changes, continuing the loop.
-4.  **Promotion to UAT:**
-    - At some point, the user will accept the `for_approval/` outputs as final for the current release stage. The user may at this point request that the `for_approval/` set becomes the new `reference/` set for subsequent work.
-    - This acceptance promotes the release to the next stage (e.g., a release candidate, `rc-0.1`), which triggers the User Acceptance Test (UAT).
-5.  **User Acceptance Test (UAT):**
-    - The release candidate is delivered to the user for UAT.
+    - The user provides tasks for fixes or features.
+    - For each test run, the agent saves outputs into a new, unique, timestamped subfolder within `test_outs/<version>/`. This folder may contain `captures/`, `logs/`, and `coverage/` subdirectories.
+4.  **Candidate for Approval & Cleanup:**
+    - When the agent believes a task is complete, it runs the tests one last time, saving the results to a new `{TIMESTAMP}` folder.
+    - The agent then copies the final outputs from that `{TIMESTAMP}` folder into a `candidate/` folder at the same level.
+    - **Cleanup:** Immediately after copying, the agent MUST delete all intermediate `{TIMESTAMP}` folders created during step 3.
+    - The agent presents the contents of the `candidate/` folder to the user for approval.
+5.  **Commit Workflow:**
+    - A commit MUST NOT be made until the user approves the contents of `test_outs/<version>/candidate/`.
+    - **Upon user approval:**
+        1. The agent must copy the approved contents from the `candidate/` folder into the `reference/` folder, replacing the old reference set.
+        2. The agent must update `handoff_notes.md`.
+        3. The agent must then **make a commit** with the source code changes and the new state of the `test_outs/` directory.
+6.  **Promotion to UAT & UAT Loop:**
+    - User acceptance of a `candidate/` set promotes the release to the next stage (e.g., `rc-0.1`), triggering the User Acceptance Test (UAT).
     - If UAT feedback requires changes, the project returns to step 3 of this Test Stage to begin another iteration.
     - If UAT is accepted, the project is approved to move to the `4.4. Deployment Stage`.
 
