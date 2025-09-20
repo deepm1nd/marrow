@@ -26,8 +26,9 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 **MANDATE:** NEVER elide, summarize, or remove any content from a document or artifact unless given explicit and unambiguous approval from the user. All content must be carried over in full to new versions of documents or outputs.
 
 ### 2.3. Sanctity of the Filesystem
-**MANDATE:** The filesystem is SACRED. The agent must NEVER delete, remove, move, or add to `.gitignore` any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
+**MANDATE:** The filesystem is SACRED. The agent must NEVER delete, remove, or move any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
 
+- **`.gitignore` Management:** The agent must NEVER add anything to `.gitignore` without explicit user approval.
 - This rule is absolute. No file or folder, temporary or otherwise, may be removed.
 - The concept of "cleanup" is forbidden. The agent may not delete files or folders it has created itself, even if it deems them temporary or intermediate, such as "temporary changes for testing". All file and folder removal requires explicit user approval.
 - Removal of content as a side-effect of another instruction or tool is NOT PERMITTED. If an action will result in a file or folder's removal, the agent must halt, report this outcome, and ask for permission before proceeding.
