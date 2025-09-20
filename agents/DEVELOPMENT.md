@@ -54,10 +54,12 @@ After completing one or more tasks, the agent will await the user's signal to co
 - **Programming Language:** The default and preferred language for all development is **Rust**.
 - **Dependency Versions:** Use the latest stable versions of all libraries, frameworks, and other dependencies, unless a specific version is required by the project.
 
-### 5.2. Dependency Management
-To ensure a consistent and reproducible development environment, dependency management must be handled as follows:
-- **`install_dependencies.sh`:** An `install_dependencies.sh` script must be maintained in the project root. Any new tools or packages required for the project must be added to this script.
-- **`install_dependencies.md`:** This markdown file must accompany the shell script. For every dependency added, an entry must be created in this file explaining the purpose of the tool/package and the command used to install it.
+### 5.2. Environment and Dependency Management
+To ensure a consistent and reproducible project environment, the agent's primary responsibility from the Development phase onward is to maintain a comprehensive setup script.
+
+- **`env_set_up.sh`:** A single script named `env_set_up.sh` must be maintained in the project root.
+- **Continuous Updates:** As the project evolves and adds required services (e.g., databases, message brokers) or dependencies (e.g., system packages, language-specific libraries), the agent **must** update this script to include the necessary installation and configuration commands.
+- **Purpose:** This script serves as the single source of truth for setting up the entire project environment from a clean state, ensuring that any developer or agent can achieve a consistent, working setup.
 
 ### 5.3. Workspace and Project Folder Structure
 - The creation of the workspace, including the main project folder, is a core responsibility of the Development Phase and should not be part of the Planning Phase.

@@ -68,29 +68,28 @@ Any test-related tools or dependencies, such as message brokers, databases, or s
 Any tools, distributables, or packages needed to support the final deployment of the application are developed and prepared during this stage.
 
 ### 4.3. Test Stage
-> **WARNING:** Due to environment constraints, the agent **MUST NOT** attempt to build Docker containers. All testing must be performed in the local, direct environment unless a pre-built image is explicitly provided by the user.
-
 This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
 
-The workflow for this stage is as follows:
+**Environment and Dependency Setup:**
+- **Primary Environment:** By default, all testing will be performed in a **direct environment** by running the application on the host machine.
+- **Docker Policy:** The agent is responsible for creating and maintaining any necessary `Dockerfile` and `docker-compose.yml` files. However, the agent **MUST NOT** attempt to build Docker images itself. Docker builds are handled by the user outside the agent's environment, primarily for UAT. The agent should only expect to use a Docker environment (e.g., with `docker compose up`) when explicitly instructed by the user for a UAT scenario.
+- **Setup Script:** The agent must ensure the `env_set_up.sh` script is up-to-date with all necessary services and dependencies required to run the project.
 
-**System Test Scripting:** The entire system test process must be encapsulated in a single, top-level script: `scripts/run_system_test.sh`.
-- **Script Orchestration:** This top-level script should not contain the logic itself, but should call two separate scripts in order:
-    1.  A `scripts/build_and_run.sh` script, which compiles the application and launches it in the background.
-    2.  A `scripts/run_tests.sh` script, which executes all the tests (e.g., Health Check, Playwright tests) against the live application.
-- **Modification Policy:** Any changes needed to successfully run the test suite should be made to the appropriate underlying script (`build_and_run.sh` or `run_tests.sh`), not the top-level orchestrator.
+**System Test Execution:**
+- **Single, Repeatable Script:** The entire system test process must be encapsulated in a single, top-level script: `scripts/run_system_test.sh`. This script must be kept repeatable and consistent.
+- **Script Orchestration:** The `run_system_test.sh` script should act as an orchestrator, calling separate, modular scripts for distinct stages of the test, such as `scripts/build_and_run.sh` and `scripts/run_tests.sh`. This maintains a separation of concerns.
+- **Pre-flight Check:** The `run_system_test.sh` script must begin by checking that all dependencies from `env_set_up.sh` are installed and configured correctly before proceeding.
+- **Logging:** The script must capture detailed logs from all steps and save them to a file within the appropriate `test_outs/` subfolder.
+- **Visual Components:** If the project has a visual or client component, the `run_tests.sh` script must include a Playwright test that captures screenshots to the `test_outs/` directory.
 
-**Agent Self-Verification Mandate:** Before any output is presented to the user for approval, the agent MUST first perform its own review to check for correctness.
-- **For Visual Outputs (e.g., PNG screenshots):** The agent must use the `read_image_file(filepath: str)` tool to load the image into its context. It must then visually analyze the image to confirm that the UI has rendered as expected, looks correct, and has no obvious visual bugs or defects.
-- **For Data Outputs (e.g., HTML, JSON, logs):** The agent must read the file content and parse it to confirm the data is structured correctly and contains the expected information.
-
+**Iterative Test Workflow:**
 1.  **Test Output Setup:** The agent must ensure a structured directory `test_outs/<version>/` exists. This folder will contain `reference/` and one or more timestamped (`YYYY-MM-DD_HH-MM-SS`) subfolders for test runs.
-2.  **Initial System Test (Reference Set):** The agent's first task is to run the full system test suite once. The outputs are stored in the `reference/` subfolder. After self-verification, the agent must present this reference set to the user for approval.
+2.  **Initial System Test (Reference Set):** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in the `reference/` subfolder. After self-verification, the agent must present this reference set to the user for approval.
 3.  **Iterative Development & Testing:**
     - The user provides tasks for fixes or features.
-    - For each test run, the agent saves outputs into a new, unique, timestamped subfolder within `test_outs/<version>/`. This folder may contain `captures/`, `logs/`, and `coverage/` subdirectories.
+    - For each test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder within `test_outs/<version>/`.
 4.  **Candidate for Approval & Cleanup:**
-    - When the agent believes a task is complete, it runs the tests one last time, saving the results to a new `{TIMESTAMP}` folder.
+    - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder.
     - The agent then copies the final outputs from that `{TIMESTAMP}` folder into a `candidate/` folder at the same level.
     - **Cleanup:** Immediately after copying, the agent MUST delete all intermediate `{TIMESTAMP}` folders created during step 3.
     - The agent presents the contents of the `candidate/` folder to the user for approval.
