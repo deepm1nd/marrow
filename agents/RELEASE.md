@@ -68,7 +68,7 @@ Any test-related tools or dependencies, such as message brokers, databases, or s
 Any tools, distributables, or packages needed to support the final deployment of the application are developed and prepared during this stage.
 
 ### 4.3. Test Stage
-This stage is an iterative cycle of `test -> correct -> repeat` with the goal of producing a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
+This stage is an iterative cycle following the explicit workflow: **change -> build -> test -> system test**. The goal of this cycle is to produce a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
 
 **Environment and Dependency Setup:**
 - **Primary Environment:** By default, all testing will be performed in a **direct environment** by running the application on the host machine.

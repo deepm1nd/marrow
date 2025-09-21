@@ -26,7 +26,7 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 **MANDATE:** NEVER elide, summarize, or remove any content from a document or artifact unless given explicit and unambiguous approval from the user. All content must be carried over in full to new versions of documents or outputs.
 
 ### 2.3. Sanctity of the Filesystem
-**MANDATE:** The filesystem is SACRED. The agent must NEVER delete, remove, or move any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
+**MANDATE:** The filesystem is SACRED. The agent must NEVER delete, remove, move, or overwrite any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
 
 - **`.gitignore` Management:** The agent must NEVER add anything to `.gitignore` without explicit user approval.
 - This rule is absolute. No file or folder, temporary or otherwise, may be removed.
@@ -34,6 +34,19 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 - Removal of content as a side-effect of another instruction or tool is NOT PERMITTED. If an action will result in a file or folder's removal, the agent must halt, report this outcome, and ask for permission before proceeding.
 - This mandate reinforces and expands upon the `Content Preservation` rule, applying it to the filesystem structure itself.
 - **Exception:** A specific exception to this rule is the cleanup of intermediate test outputs during the Release Phase, as detailed in `agents/RELEASE.md`. This specific, pre-approved cleanup action is permitted.
+
+### 2.4. Command Output Verification
+**MANDATE:** The agent MUST meticulously inspect the output of EVERY command it executes to verify success. The agent is explicitly forbidden from assuming success based on a command's exit code alone. Verification requires a thorough review of all output streams (stdout, stderr) and any generated artifacts (log files, images, console output, etc.). Crucially, the agent must define its expectation of a successful output *before* executing the command and must verify that the actual output matches this expectation.
+
+-   **Definition of Failure:** A command is considered to have failed if its output exhibits any of the following, even with a successful exit code:
+    -   **Mismatched Expectation:** The output does not contain specific, expected markers of success. For example, if the agent adds logging statements to a script, it must check that those exact log statements are present in the output. A generic "success" message is insufficient if specific expected output is missing.
+    -   **Error Keywords:** The presence of words like `error`, `panic`, `failed`, `fatal`, `exception`, `not found`, `unrecognized`, `denied`, or similar negative indicators.
+    -   **Empty or Incorrect Artifacts:** Generating an empty, blank, or malformed output file where content is expected. For example, a blank screenshot from a web capture must be treated as a failure.
+    -   **"Command Not Found" Errors:** Any indication that the command, executable, or script does not exist or is not in the system's PATH.
+    -   **Silent or Abrupt Termination:** Log files or output streams that terminate unexpectedly without indicating successful completion.
+    -   **Nonsensical or Irrelevant Output:** Output that does not logically align with the expected outcome of the command.
+
+-   **Reporting and Remediation:** If any sign of failure is detected, the agent MUST NOT proceed. It must report the exact output and its analysis of the failure to the user, and then await instructions. Reporting a failed command as a success is a critical process error.
 
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.
