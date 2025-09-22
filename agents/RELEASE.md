@@ -68,7 +68,7 @@ Any test-related tools or dependencies, such as message brokers, databases, or s
 Any tools, distributables, or packages needed to support the final deployment of the application are developed and prepared during this stage.
 
 ### 4.3. Test Stage
-This stage is an iterative cycle following the explicit workflow: **change -> build -> test -> system test**. The goal of this cycle is to produce a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`).
+This stage is an iterative cycle following the explicit workflow: **change -> build -> test -> system test**. The goal of this cycle is to produce a stable, high-quality, and user-approved release candidate. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`). **MANDATE: No step in this workflow may be skipped. The agent MUST successfully complete the `build` (`cargo build`) and `test` (`cargo test`) steps before proceeding to the `system test` step.**
 
 **Environment and Dependency Setup:**
 - **Primary Environment:** By default, all testing will be performed in a **direct environment** by running the application on the host machine.
@@ -79,7 +79,7 @@ This stage is an iterative cycle following the explicit workflow: **change -> bu
 - **Single, Repeatable Script:** The entire system test process must be encapsulated in a single, top-level script: `scripts/run_system_test.sh`. This script must be kept repeatable and consistent.
 - **Script Orchestration:** The `run_system_test.sh` script should act as an orchestrator, calling separate, modular scripts for distinct stages of the test, such as `scripts/build_and_run.sh` and `scripts/run_tests.sh`. This maintains a separation of concerns.
 - **Pre-flight Check:** The `run_system_test.sh` script must begin by checking that all dependencies from `env_set_up.sh` are installed and configured correctly before proceeding.
-- **Logging:** The script must capture detailed logs from all steps and save them to a file within the appropriate `test_outs/` subfolder.
+- **Logging Mandate:** All executed scripts and applications MUST be fully instrumented with leveled logging, using the `tracing` framework as specified in the development guide. The system test script must capture detailed, complete logs from all steps and save them to a file within the appropriate `test_outs/` subfolder. Verification of these logs for expected output is a required part of the test validation.
 - **Visual Components:** If the project has a visual or client component, the `run_tests.sh` script must include a Playwright test that captures screenshots to the `test_outs/` directory.
 
 **Iterative Test Workflow:**

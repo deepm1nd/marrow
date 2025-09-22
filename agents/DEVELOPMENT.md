@@ -37,6 +37,12 @@ These are non-negotiable rules for the development process.
 ## 4. Development Workflow
 The development process is iterative and checklist-driven. The agent will work on tasks sequentially, batching all file changes. Commits will only be made when explicitly instructed by the user.
 
+**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle:
+1. **Change:** Make the required code edits.
+2. **Build:** Immediately run `cargo build` to ensure the code compiles without errors.
+3. **Test:** Immediately run `cargo test` to ensure all unit and integration tests pass.
+A step is not complete until this cycle has been successfully executed. The agent is forbidden from proceeding to broader integration or system tests without first completing this fundamental loop.
+
 The workflow for a single task is as follows:
 1.  **Select a Task:** Pick the next unfinished task from the `[project_name]_checklist.md`.
 2.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). All unit tests for the feature must pass.
@@ -69,11 +75,13 @@ To ensure a consistent and reproducible project environment, the agent's primary
 - The main prompt and handoff files should always be placed in the repo root.
 - The Rust workspace should be in a folder like `[projectname]/` in the repo root, with the Rust source code in the `src/` folder as per Rust best practices for folder structure.
 
-### 5.4. Logging
-- **Implementation:** The agent must implement the 8-level logging system as defined in the `Architecture Specification`.
-- **Instrumentation:** Code should be instrumented with appropriate log messages at each level. Use `Debug` for detailed development-time information and `Notice` for significant but normal runtime events. Critical, Error, and Warning levels should be used for their respective conditions.
+### 5.4. Logging Mandate
+**MANDATE:** Leveled logging and instrumentation are mandatory for all code and scripts created from the Development phase onward.
+- **Framework:** The `tracing` crate is the preferred framework for implementing logging in Rust code.
+- **Instrumentation:** All code and scripts must be thoroughly instrumented with leveled logs. This includes logging entry and exit points of functions, important state changes, and error conditions.
+- **Log Levels:** The 8-level logging system (Emergency, Alert, Critical, Error, Warning, Notice, Informational, Debug) must be used.
 - **Configuration:** The implementation must allow the log level to be set at launch, defaulting to `NOTICE`.
-- **Console Output:** All logs should be written to the console, and color-coding should be implemented to differentiate log levels.
+- **Verification:** As part of the `change -> build -> test` cycle, the agent must verify that expected log outputs are present, as per the "Command Output Verification" mandate.
 
 ## 6. Quality and Completeness for Development
 ### 6.1. Build Early, Build Often Principle
