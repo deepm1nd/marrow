@@ -83,24 +83,23 @@ This stage is an iterative cycle following the explicit workflow: **change -> bu
 - **Visual Components:** If the project has a visual or client component, the `run_tests.sh` script must include a Playwright test that captures screenshots to the `test_outs/` directory.
 
 **Iterative Test Workflow:**
-1.  **Test Output Setup:** The agent must ensure a structured directory `test_outs/<version>/` exists. This folder will contain `reference/` and one or more timestamped (`YYYY-MM-DD_HH-MM-SS`) subfolders for test runs.
-2.  **Initial System Test (Reference Set):** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in the `reference/` subfolder. After self-verification, the agent must present this reference set to the user for approval.
+1.  **Test Output Setup:** The agent must ensure the standard test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder.
+2.  **Initial System Test (Reference Set):** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in `reference/`. After self-verification, the agent must present this reference set to the user for approval.
 3.  **Iterative Development & Testing:**
     - The user provides tasks for fixes or features.
-    - For each test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder within `test_outs/<version>/`.
-4.  **Candidate for Approval & Cleanup:**
-    - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder.
-    - The agent then copies the final outputs from that `{TIMESTAMP}` folder into a `candidate/` folder at the same level.
-    - **Cleanup:** Immediately after copying, the agent MUST delete all intermediate `{TIMESTAMP}` folders created during step 3.
-    - The agent presents the contents of the `candidate/` folder to the user for approval.
-5.  **Commit Workflow:**
-    - A commit MUST NOT be made until the user approves the contents of `test_outs/<version>/candidate/`.
+    - For each subsequent test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder inside `test_outs/<version>/temp/`.
+4.  **Candidate for Approval:**
+    - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder inside `temp/`.
+    - The agent presents the contents of this final timestamped folder (e.g., `temp/{final_timestamp}/`) to the user for approval.
+5.  **Pre-Commit Cleanup & Commit Workflow:**
+    - A commit MUST NOT be made until the user approves the candidate test results.
     - **Upon user approval:**
-        1. The agent must copy the approved contents from the `candidate/` folder into the `reference/` folder, replacing the old reference set.
-        2. The agent must update `handoff_notes.md`.
-        3. The agent must then **make a commit** with the source code changes and the new state of the `test_outs/` directory.
+        1. The agent must copy the approved contents from the candidate folder (e.g., `temp/{final_timestamp}/`) into the `reference/` folder, replacing the old reference set.
+        2. **Cleanup Mandate:** The agent MUST delete the entire `temp/` directory and all its contents.
+        3. The agent must update `handoff_notes.md`.
+        4. The agent must then **make a commit** with the source code changes and the new state of the `test_outs/` directory (which now only contains the updated `reference/` folder).
 6.  **Promotion to UAT & UAT Loop:**
-    - User acceptance of a `candidate/` set promotes the release to the next stage (e.g., `rc-0.1`), triggering the User Acceptance Test (UAT).
+    - User acceptance of a candidate promotes the release to the next stage (e.g., `rc-0.1`), triggering the User Acceptance Test (UAT).
     - If UAT feedback requires changes, the project returns to step 3 of this Test Stage to begin another iteration.
     - If UAT is accepted, the project is approved to move to the `4.4. Deployment Stage`.
 

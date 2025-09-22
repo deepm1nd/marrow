@@ -139,11 +139,19 @@ When executing commands or interacting with the filesystem, it is critical to ma
 - **Change Directory Intentionally:** If a command must be run from a specific directory, explicitly change to that directory (`cd /path/to/dir`) before executing the command.
 
 ### 5.5. Test Output Directory
-**MANDATE:** All outputs generated during testing (e.g., logs, screenshots, raw data captures, reports) MUST be placed in a dedicated root-level directory named `test_outs/`.
+**MANDATE:** All outputs generated during testing MUST be placed in a dedicated, version-controlled root-level directory named `test_outs/`.
 
-Furthermore, each distinct test run or "pass" (a build-test pair) MUST have its own unique subfolder within `test_outs/`. This rule applies to any nested subfolders as well. The subfolder MUST be named using a timestamp format that ensures chronological sorting (e.g., `YYYY-MM-DD_HH-MM-SS`).
+The structure within this directory is as follows:
+`test_outs/`
+`|-{version}`
+`   |-reference/`
+`   |-temp/`
+`      |-{timestamp}/`
 
-**Persistence:** The `test_outs/` directory and all of its contents are considered critical project artifacts. They must be committed to the repository and must never be deleted or added to `.gitignore`.
+- **`reference/`**: This directory stores the "golden copy" of test outputs that have been approved by the user. It is the baseline for future test comparisons.
+- **`temp/`**: This directory is for all in-progress, iterative test runs. Each run MUST be stored in its own unique, timestamped subfolder.
+
+**Cleanup Mandate:** The `temp/` directory is strictly for transient work. The agent MUST delete the entire `temp/` directory and all its contents before making any commit. The `reference/` directory is the only part of `test_outs/` that should be committed.
 
 ## 6. Documentation Standards
 ### 6.1. General
