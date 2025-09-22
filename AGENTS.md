@@ -101,9 +101,11 @@ To preserve context, multiple user requests should be handled within the same se
 
 ## 5. Development Conventions
 ### 5.1. Programming Language Mandate
-**MANDATE:** The primary and preferred language for all development is **Rust**. The use of any other programming or scripting language (e.g., Python, JavaScript, Go, Bash) for any part of the project, including build scripts, tests, or supporting tools, requires a clear justification and explicit user approval before implementation.
+**MANDATE:** The primary and preferred language for all **application code** is **Rust**.
 
-This restriction does not apply to declarative languages such as HTML and CSS.
+- **Application Code:** All core logic, business logic, and primary functionality of the project MUST be written in Rust.
+- **Scripts & Tooling:** Ancillary scripts for building, testing, setup, or other automation (`env_set_up.sh`, `run_system_test.sh`, etc.) are exempt from this restriction. The agent is free to use other appropriate scripting languages (e.g., Bash, Python) for these tasks without seeking user approval.
+- **Declarative Languages:** This mandate does not apply to declarative languages such as HTML and CSS.
 
 ### 5.2. Naming Conventions
 - **File and Folder Names:** Use snake_case (e.g., `my_folder_name/`, `my_file_name.md`).
