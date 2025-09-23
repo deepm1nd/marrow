@@ -3,7 +3,7 @@
 This document lists the preferred dependencies for Rust projects. When designing, planning, or developing, you must check against this list. If a dependency is not on this list, you must notify the user and get approval before using it.
 
 ## Web & Networking
-- tokio
+- tokio  # MANDATE: For native applications ONLY. Incompatible with WASM.
 - axum
 - reqwest
 - tonic
@@ -13,6 +13,7 @@ This document lists the preferred dependencies for Rust projects. When designing
 - wtransport
 
 ## Frontend (Yew)
+# NOTE: The `tokio` runtime MUST NOT be used in WASM-based frontend applications.
 - yew
 - yew-router
 - material-yew
