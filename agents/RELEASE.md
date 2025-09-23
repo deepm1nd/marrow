@@ -83,23 +83,23 @@ This stage is an iterative cycle following the explicit workflow: **change -> bu
 - **Visual Components:** If the project has a visual or client component, the `run_tests.sh` script must include a Playwright test that captures screenshots to the `test_outs/` directory.
 
 **Iterative Test Workflow:**
-1.  **Test Output Setup:** The agent must ensure the standard test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder.
-2.  **Initial System Test (Reference Set):** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in `reference/`. After self-verification, the agent must present this reference set to the user for approval.
+1.  **Local Test Output Setup:** The agent must ensure the local (and git-ignored) test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder, as defined in `AGENTS.md`.
+2.  **Initial Local Reference Set:** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in the local `reference/` directory. After self-verification, the agent must present the file path to this directory to the user for initial approval.
 3.  **Iterative Development & Testing:**
     - The user provides tasks for fixes or features.
-    - For each subsequent test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder inside `test_outs/<version>/temp/`.
+    - For each subsequent test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
 4.  **Candidate for Approval:**
     - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder inside `temp/`.
-    - The agent presents the contents of this final timestamped folder (e.g., `temp/{final_timestamp}/`) to the user for approval.
-5.  **Pre-Commit Cleanup & Commit Workflow:**
-    - A commit MUST NOT be made until the user approves the candidate test results.
+    - The agent MUST present the **direct file path** to this final timestamped folder (e.g., `test_outs/<version>/temp/{final_timestamp}/`) to the user for review.
+5.  **Approval & Commit Workflow:**
+    - A commit MUST NOT be made until the user approves the candidate test results via the provided file path.
     - **Upon user approval:**
-        1. The agent must copy the approved contents from the candidate folder (e.g., `temp/{final_timestamp}/`) into the `reference/` folder, replacing the old reference set.
+        1. The agent must copy the approved contents from the candidate folder into the local `reference/` folder, replacing the old local reference set.
         2. **Cleanup Mandate:** The agent MUST delete the entire `temp/` directory and all its contents.
         3. The agent must update `handoff_notes.md`.
-        4. The agent must then **make a commit** with the source code changes and the new state of the `test_outs/` directory (which now only contains the updated `reference/` folder).
+        4. The agent must then **commit the source code changes only**.
 6.  **Promotion to UAT & UAT Loop:**
-    - User acceptance of a candidate promotes the release to the next stage (e.g., `rc-0.1`), triggering the User Acceptance Test (UAT).
+    - User acceptance of the test outputs promotes the release to the next stage (e.g., `rc-0.1`), triggering the User Acceptance Test (UAT).
     - If UAT feedback requires changes, the project returns to step 3 of this Test Stage to begin another iteration.
     - If UAT is accepted, the project is approved to move to the `4.4. Deployment Stage`.
 

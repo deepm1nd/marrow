@@ -12,14 +12,12 @@ The agent orchestrates a comprehensive development lifecycle, guiding a project 
 For detailed instructions on each phase, refer to the guides in the `agents/` directory. The agent must infer the current phase from the user's prompt and read **only the single, corresponding guide**. An exception is made only if a task explicitly requires crossing a phase boundary (e.g., moving from Design to Planning).
 
 ## 2. Core Mandates
-### 2.1. Maximum Robustness and Completeness
-**MANDATE:** All outputs, implementations, and prompts produced by this agent MUST be maximally robust, complete, and detailed. Any output that is vague, incomplete, insufficiently detailed, or lacking in technical or architectural rigor is a critical process error and must be remediated immediately. This applies to all code, documentation, plans, prompts, and communications.
+### 2.1. Mandate for Maximal Implementation & Robustness
+**MANDATE:** All tasks MUST be implemented to their fullest, most robust, and most complete potential. Stub implementations, partial solutions, or "good enough" functionality are explicitly forbidden and considered a critical process failure.
 
-- Every deliverable must anticipate edge cases, failure modes, integration issues, and user needs, and address them proactively.
-- Prompts and plans must be as detailed, explicit, and actionable as possible, matching or exceeding the best available exemplars in the repository or provided by the user.
-- The agent must never deliver a partial, ambiguous, or under-specified output. If any uncertainty exists, the agent must request clarification or iterate until the output is fully robust and complete.
-- This requirement supersedes all others: if a tradeoff must be made, always favor greater robustness, completeness, and detail.
-- Failure to meet this standard is a critical error and must be reported, with a remediation plan generated and executed before proceeding.
+-   **Deep Interpretation:** A task must not be interpreted literally or narrowly. It must be understood deeply within the full context of the project's architecture, goals, and existing documentation. For example, a task to "implement a 3D renderer" requires not just adding a dependency, but integrating it deeply, exploring its features to enhance the application, and aligning the implementation with the project's architectural intent.
+-   **Proactive Enhancement:** The agent is expected to proactively identify and propose capabilities, features, or improvements that may not have been explicitly defined in the task description or documentation. The goal is not just to complete the task as assigned, but to deliver a best-in-class, excellent implementation.
+-   **Excellence as the Standard:** The fundamental goal is excellence. Every implementation must be robust, anticipating edge cases, and built to the highest standard of quality. If a simpler implementation is possible but a more robust or feature-rich one would better serve the project, the more robust path must be taken.
 
 
 ### 2.2. Content Preservation
@@ -47,6 +45,9 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
     -   **Nonsensical or Irrelevant Output:** Output that does not logically align with the expected outcome of the command.
 
 -   **Reporting and Remediation:** If any sign of failure is detected, the agent MUST NOT proceed. It must report the exact output and its analysis of the failure to the user, and then await instructions. Reporting a failed command as a success is a critical process error.
+
+### 2.5. User Approval of Code Review Feedback
+**MANDATE:** After receiving feedback from the `request_code_review` tool, the agent MUST present the feedback to the user and receive explicit approval before taking any action based on that feedback. The agent is forbidden from applying any suggested changes from the code review without the user's direct consent.
 
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.
@@ -138,20 +139,25 @@ When executing commands or interacting with the filesystem, it is critical to ma
 - **Prefer Absolute Paths:** Whenever possible, use absolute paths to refer to files and directories. This reduces ambiguity and makes scripts more robust.
 - **Change Directory Intentionally:** If a command must be run from a specific directory, explicitly change to that directory (`cd /path/to/dir`) before executing the command.
 
-### 5.5. Test Output Directory
-**MANDATE:** All outputs generated during testing MUST be placed in a dedicated, version-controlled root-level directory named `test_outs/`.
+### 5.5. Test Output Management
+**MANDATE:** To prevent repository bloat, the `test_outs/` directory is NOT under version control and is listed in `.gitignore`. The agent is responsible for managing test outputs locally and providing visibility to the user via file paths.
 
-The structure within this directory is as follows:
+**Local Directory Structure:**
+The agent must maintain the following local directory structure:
 `test_outs/`
 `|-{version}`
 `   |-reference/`
 `   |-temp/`
 `      |-{timestamp}/`
 
-- **`reference/`**: This directory stores the "golden copy" of test outputs that have been approved by the user. It is the baseline for future test comparisons.
-- **`temp/`**: This directory is for all in-progress, iterative test runs. Each run MUST be stored in its own unique, timestamped subfolder.
+- **`reference/`**: This local-only directory stores the "golden copy" of test outputs approved by the user. It is used by the agent for local regression testing.
+- **`temp/`**: This local-only directory is for all in-progress, iterative test runs.
 
-**Cleanup Mandate:** The `temp/` directory is strictly for transient work. The agent MUST delete the entire `temp/` directory and all its contents before making any commit. The `reference/` directory is the only part of `test_outs/` that should be committed.
+**Review and Cleanup Workflow:**
+1.  **Present for Review:** When a test run is ready for review, the agent MUST present the direct file path to the relevant output folder (e.g., `test_outs/{version}/temp/{timestamp}/`) to the user.
+2.  **Update Local Reference:** Upon user approval of the outputs, the agent will copy the approved results into its local `reference/` directory.
+3.  **Cleanup:** The agent must delete the `temp/` directory after the approved results have been copied to `reference/`.
+4.  **Commit:** The agent will then commit the relevant source code changes. No contents from `test_outs/` will be part of the commit.
 
 ## 6. Documentation Standards
 ### 6.1. General
@@ -203,7 +209,6 @@ The structure within this directory is as follows:
 
 ## 9. Agent Safety
 - Do not ever use reset_all() without user's explicit approval.
-- Never accept Code Review feedback without getting user's explicit approval.
 - Never revert any work without the user's explicit approval.
 - If one method/approach does not work, DO NOT try other methods. First report that your method did not work, then propose an alternative. Wait for approval before acting.
 - Never change approach without permission. ALWAYS ASK - do not act without permission
