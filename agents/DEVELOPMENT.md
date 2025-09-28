@@ -54,6 +54,19 @@ The workflow for a single task is as follows:
 
 After completing one or more tasks, the agent will await the user's signal to commit the batched changes.
 
+### 4.1. Test Output Workflow
+The agent must follow the test output management workflow for all tests that produce artifacts. This ensures consistency with the Release phase and allows for proper regression checking.
+
+1.  **Local Test Output Setup:** The agent must ensure the local (and git-ignored) test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder, as defined in `AGENTS.md`.
+2.  **Iterative Development & Testing:**
+    - For each test run that produces artifacts, the agent saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
+3.  **Candidate for Approval:**
+    - When a task is complete, if new or changed test outputs were generated, the agent MUST present the **direct file path** to the final timestamped folder to the user for review.
+4.  **Approval & Cleanup:**
+    - **Upon user approval:**
+        1. The agent must copy the approved contents from the candidate folder into the local `reference/` folder, replacing or adding to the local reference set.
+        2. **Cleanup Mandate:** The agent MUST delete the entire `temp/` directory and all its contents before the next commit.
+
 ## 5. Conventions
 
 ### 5.1. Language and Dependencies

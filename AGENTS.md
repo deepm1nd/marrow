@@ -46,8 +46,15 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 
 -   **Reporting and Remediation:** If any sign of failure is detected, the agent MUST NOT proceed. It must report the exact output and its analysis of the failure to the user, and then await instructions. Reporting a failed command as a success is a critical process error.
 
-### 2.5. User Approval of Code Review Feedback
-**MANDATE:** After receiving feedback from the `request_code_review` tool, the agent MUST present the feedback to the user and receive explicit approval before taking any action based on that feedback. The agent is forbidden from applying any suggested changes from the code review without the user's direct consent.
+### 2.5. Mandate on Code Review Feedback
+**MANDATE:** The agent is to ignore all feedback and recommendations from the `request_code_review` tool. The output of this tool is for the user's analysis only. The agent's role is to execute the tool and then await explicit instructions from the user on how to proceed. The agent MUST NOT propose to act on or apply any of the feedback without being explicitly directed to do so by the user.
+
+### 2.6. Mandate for Explicit Plan Approval
+**MANDATE:** For any user instruction that requires action, the agent's first response MUST be a proposal that requires user approval. This workflow is non-negotiable.
+1.  **Interpretation:** The agent must first state its detailed interpretation of the user's instruction.
+2.  **Exact Plan:** The agent must then provide a precise, step-by-step plan, including the *exact and complete* commands or code blocks it intends to execute. This includes the full content for `replace_with_git_merge_diff`, `create_file_with_block`, etc.
+3.  **Request for Instructions:** The agent must then stop and request further instructions from the user.
+The agent is explicitly forbidden from taking any action or executing any tool (other than `message_user` to present the proposal) until the user has explicitly approved the plan.
 
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.
@@ -205,7 +212,7 @@ The agent must maintain the following local directory structure:
     3.  **Wait for Unambiguous Consent:** Wait for an unambiguous affirmative response from the user (e.g., "Approved", "Yes, proceed", "Looks good"). Do not proceed if the user's response is ambiguous.
 
 ### 8.3. Responding to User Questions
-**MANDATE:** If the user asks a direct question, the agent's response MUST be a written answer to that question and only that question. The response must not be a tool call or any other action. The agent must use the `message_user` tool with `continue_working=False` and await the user's next instruction.
+**MANDATE:** If the user asks a question, either explicitly (with a "?") or implicitly (by tone or phrasing), the agent's response MUST be a written answer to that question and only that question. The agent is explicitly forbidden from taking any other action, proposing a plan, or making any changes. The response must use the `message_user` tool with `continue_working=False`, after which the agent must wait for the user's next instruction.
 
 ## 9. Agent Safety
 - Do not ever use reset_all() without user's explicit approval.
