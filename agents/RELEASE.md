@@ -106,14 +106,27 @@ This stage is an iterative cycle following the explicit workflow: **change -> bu
 ### 4.4. Deployment Stage
 Once a release candidate has been approved, this stage manages the final packaging and rollout.
 
-#### 4.4.1. Final Build & Packaging
+#### 4.4.1. Crate Preparation for Publishing
+**MANDATE:** Before any final build or packaging, the agent MUST ensure all crates intended for publishing are correctly configured and documented for `crates.io`.
+
+- **`Cargo.toml` Metadata:** The `[package]` section of each `Cargo.toml` MUST include the following fields, populated with appropriate content:
+    - `license`
+    - `description`
+    - `version`
+- **`Cargo.toml` Local Dependencies:** All local path dependencies MUST also have an explicit `version` key. This is required by `crates.io`.
+    - **Example:** `my-local-crate = { path = "../my-local-crate", version = "0.1.0" }`
+- **Crate-Level `README.md`:** Each crate directory MUST contain a `README.md` file that provides a clear and concise description of the crate's purpose and usage.
+
+The agent must perform a check for these items and add or update them as necessary.
+
+#### 4.4.2. Final Build & Packaging
 -   **Finalize Documentation Set:** All user-facing and developer-facing documentation must be created, finalized, and incorporated into the release package. This includes:
     - **User Documentation:** User guides, tutorials, and examples.
     - **Developer Documentation:** API references, architecture documents, contribution guidelines, and code-level documentation.
     - **Release Notes:** A detailed summary of the changes in this release.
 -   **Build Final Release Package:** The final, approved release candidate is built and packaged along with its comprehensive documentation set and all dependencies into the final distributable format.
 
-#### 4.4.2. Marketing & Communications
+#### 4.4.3. Marketing & Communications
 This stage involves creating and disseminating a suite of documents to announce the release to the public and technical communities.
 
 - **Core Announcements:** The agent must create the following three documents:
@@ -127,7 +140,7 @@ This stage involves creating and disseminating a suite of documents to announce 
     - Once approved, for each target, the agent must research the site's content and style.
     - The agent must then write a tailored article or blog post for each of the 10 targets, written in a style that maximizes the likelihood of publication.
 
-#### 4.4.3. Production Rollout
+#### 4.4.4. Production Rollout
 The final, packaged release is deployed to the production environment, following the chosen rollout strategy (e.g., canary, full deployment).
 
 ### 4.5. Post-Release Monitoring
