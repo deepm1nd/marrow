@@ -59,7 +59,7 @@ The release process must follow a structured branching strategy.
 This stage focuses on ensuring that all prerequisites for testing and deployment are met.
 
 #### 4.2.1. Feature Audit
-A basic check of implemented functionality against the applicable architecture specification, development plan, and checklist is performed. This is a sanity check to ensure the release candidate is aligned with the project goals before intensive testing begins.
+**MANDATE:** A thorough and comprehensive audit of the entire codebase MUST be performed. This audit involves a deep comparison of the implemented code against all relevant documentation, including the architecture specification, development plan, and feature checklists. The goal is to ensure that all planned features have been implemented completely and correctly, and that the final state of the code accurately reflects the design and planning documents. This is a critical verification step, not a basic sanity check.
 
 #### 4.2.2. Environment Provisioning
 Any test-related tools or dependencies, such as message brokers, databases, or specific system/network services, are developed and/or installed in the testing environment.
