@@ -22,3 +22,8 @@ secrets.*
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Test outputs
+# These are not committed to the repository to avoid bloat.
+# They are reviewed via direct file path access.
+test_outs/

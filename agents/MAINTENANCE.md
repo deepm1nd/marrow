@@ -93,6 +93,10 @@ Once merged into the main development branch, the feature is bundled into the ne
 ### 5.3. Documentation Mandate
 - No feature is considered complete until all relevant user and developer documentation has been updated to reflect the changes. Outdated documentation is a critical issue.
 
+### 5.4. Logging Mandate
+- **MANDATE:** All new or modified code and scripts MUST adhere to the leveled logging and instrumentation standards defined in the `DEVELOPMENT.md` guide.
+- This includes using the `tracing` framework, instrumenting all changes thoroughly, and ensuring that log verification is part of the testing process for any change.
+
 ---
 
 ## Appendix R - Revision History
