@@ -72,7 +72,6 @@ These principles apply across all phases of the development lifecycle.
 
 ### 3.4. Preferred Tool Adherence
 - **This principle applies to all phases.** The agent must consult the `agents/PREFERRED_TOOLS.md` file to see the list of preferred tools.
-
 - If the agent proposes using a tool that is NOT on the preferred list, it must explicitly notify the user of this deviation and request approval.
 
 ### 3.5. Library and Technology Option Disclosure Requirement
