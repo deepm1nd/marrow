@@ -37,18 +37,18 @@ These are non-negotiable rules for the development process.
 ## 4. Development Workflow
 The development process is iterative and checklist-driven. The agent will work on tasks sequentially, batching all file changes. Commits will only be made when explicitly instructed by the user.
 
-**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle:
+**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle for rapid, local verification:
 1. **Change:** Make the required code edits.
-2. **Build:** Immediately run `cargo build` to ensure the code compiles without errors.
-3. **Test:** Immediately run `cargo test` to ensure all unit and integration tests pass.
-A step is not complete until this cycle has been successfully executed. The agent is forbidden from proceeding to broader integration or system tests without first completing this fundamental loop.
+2. **Build:** Immediately run `cargo build` to ensure the specific crate or code compiles without errors.
+3. **Test:** Immediately run `cargo test` to ensure all local unit and integration tests pass.
+A step is not complete until this cycle has been successfully executed. This cycle is for immediate feedback. Broader, full-system validation MUST use the standardized scripts.
 
 The workflow for a single task is as follows:
 1.  **Select a Task:** Pick the next unfinished task from the `[project_name]_checklist.md`.
-2.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). All unit tests for the feature must pass.
-3.  **Build & Integration Test:** Build the project and run integration tests to ensure the new code works correctly with other parts of the system.
-4.  **System & Acceptance Test:** Execute the automated and/or manual system-level tests as defined in the Test Plan. All acceptance criteria for the feature must be met.
-5.  **Regression Test:** After implementing a set of changes and before signaling completion to the user, run the *entire* existing test suite to ensure no existing functionality was broken.
+2.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). Use the `change -> build -> test` cycle with `cargo` commands for rapid iteration. All unit tests for the feature must pass.
+3.  **Build & Integration Test:** Build the entire system using the `scripts/build_system.sh` script. This ensures all components build correctly together.
+4.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script. All acceptance criteria for the feature must be met.
+5.  **Regression Test:** After implementing a set of changes and before signaling completion to the user, run the *entire* existing test suite to ensure no existing functionality was broken. This is typically achieved by re-running `scripts/run_system_test.sh`.
 6.  **Update Checklist:** Once the task is complete and all tests have passed, update its status in the checklist.
 7.  **Update Handoff Files:** Update the handoff notes and open issues files with a summary of the changes and any new issues that arose.
 
@@ -59,7 +59,7 @@ The agent must follow the test output management workflow for all tests that pro
 
 1.  **Local Test Output Setup:** The agent must ensure the local (and git-ignored) test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder, as defined in `AGENTS.md`.
 2.  **Iterative Development & Testing:**
-    - For each test run that produces artifacts, the agent saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
+    - For each test run that produces artifacts (typically by running `scripts/run_system_test.sh`), the agent saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
 3.  **Candidate for Approval:**
     - When a task is complete, if new or changed test outputs were generated, the agent MUST present the **direct file path** to the final timestamped folder to the user for review.
 4.  **Approval & Cleanup:**
@@ -71,14 +71,14 @@ The agent must follow the test output management workflow for all tests that pro
 
 ### 5.1. Language and Dependencies
 - **Programming Language:** The default and preferred language for all development is **Rust**.
-- **Dependency Versions:** Use the latest stable versions of all libraries, frameworks, and other dependencies, unless a specific version is required by the project.
+- **Rust Edition and Dependency Versions:** All Rust development MUST strictly adhere to the `Rust Versioning Mandates` outlined in `AGENTS.md` (section 5.1.1). This requires using the **2024 edition** and preferring the latest stable dependency versions, while allowing for specific versions to ensure project stability.
 
 ### 5.2. Environment and Dependency Management
-To ensure a consistent and reproducible project environment, the agent's primary responsibility from the Development phase onward is to maintain a comprehensive setup script.
+To ensure a consistent and reproducible project environment, the agent MUST adhere to the standardized scripting conventions defined in `AGENTS.md` (section 5.6).
 
-- **`env_set_up.sh`:** A single script named `env_set_up.sh` must be maintained in the project root.
-- **Continuous Updates:** As the project evolves and adds required services (e.g., databases, message brokers) or dependencies (e.g., system packages, language-specific libraries), the agent **must** update this script to include the necessary installation and configuration commands.
-- **Purpose:** This script serves as the single source of truth for setting up the entire project environment from a clean state, ensuring that any developer or agent can achieve a consistent, working setup.
+- **Dependency Installation (`scripts/setup_env.sh`):** All environment dependencies (applications, packages, tools) MUST be managed through the `scripts/setup_env.sh` script. As the project evolves, the agent **must** add any new installation commands to this script before running them in the session. This script serves as the single source of truth for environment setup.
+
+- **Service Management (`scripts/start_services.sh`):** All background services required for the project (e.g., databases, web servers, message brokers) MUST be configured and started using the `scripts/start_services.sh` script. This script should be run at the beginning of a development session to ensure the necessary services are running.
 
 ### 5.3. Workspace and Project Folder Structure
 - The creation of the workspace, including the main project folder, is a core responsibility of the Development Phase and should not be part of the Planning Phase.
@@ -89,9 +89,11 @@ To ensure a consistent and reproducible project environment, the agent's primary
 - The Rust workspace should be in a folder like `[projectname]/` in the repo root, with the Rust source code in the `src/` folder as per Rust best practices for folder structure.
 
 ### 5.4. Logging Mandate
-**MANDATE:** Leveled logging and instrumentation are mandatory for all code and scripts created from the Development phase onward.
+**MANDATE:** Extensive, multi-level logging and instrumentation are mandatory for all code and scripts created from the Development phase onward. This instrumentation is a permanent and core part of the codebase.
+
+- **Permanence:** Instrumentation and logging code MUST NOT be removed. It is considered a fundamental part of the application's implementation, not a temporary debugging tool.
 - **Framework:** The `tracing` crate is the preferred framework for implementing logging in Rust code.
-- **Instrumentation:** All code and scripts must be thoroughly instrumented with leveled logs. This includes logging entry and exit points of functions, important state changes, and error conditions.
+- **Instrumentation:** All code and scripts must be thoroughly and extensively instrumented with leveled logs. This includes logging entry and exit points of functions, important state changes, error conditions, and any other significant events. All logging levels (from Informational to Emergency) MUST be used where appropriate.
 - **Log Levels:** The 8-level logging system (Emergency, Alert, Critical, Error, Warning, Notice, Informational, Debug) must be used.
 - **Configuration:** The implementation must allow the log level to be set at launch, defaulting to `NOTICE`.
 - **Verification:** As part of the `change -> build -> test` cycle, the agent must verify that expected log outputs are present, as per the "Command Output Verification" mandate.
