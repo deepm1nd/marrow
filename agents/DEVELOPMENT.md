@@ -35,37 +35,56 @@ These are non-negotiable rules for the development process.
 - **Pre-commit Handoff File Updates:** Before any code is committed, all handoff files (`handoff_notes.md`, `open_issues.md`, etc.) MUST be updated to reflect the latest state of the project. This ensures seamless collaboration and session continuity.
 
 ## 4. Development Workflow
-The development process is iterative and checklist-driven. The agent will work on tasks sequentially, batching all file changes. Commits will only be made when explicitly instructed by the user.
+The development process is iterative, checklist-driven, and structured into **Development Phases**. A Development Phase is a logical grouping of tasks defined in the Development Plan. The agent MUST complete all tasks within the current phase before proceeding to the next. All file changes within a phase should be batched. Commits will only be made when explicitly instructed by the user.
 
-**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle:
+**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle for rapid, local verification:
 1. **Change:** Make the required code edits.
-2. **Build:** Immediately run `cargo build` to ensure the code compiles without errors.
-3. **Test:** Immediately run `cargo test` to ensure all unit and integration tests pass.
-A step is not complete until this cycle has been successfully executed. The agent is forbidden from proceeding to broader integration or system tests without first completing this fundamental loop.
+2. **Build:** Immediately run `cargo build` to ensure the specific crate or code compiles without errors.
+3. **Test:** Immediately run `cargo test` to ensure all local unit and integration tests pass.
+A step is not complete until this cycle has been successfully executed. This cycle is for immediate feedback. Broader, full-system validation MUST use the standardized scripts.
 
-The workflow for a single task is as follows:
-1.  **Select a Task:** Pick the next unfinished task from the `[project_name]_checklist.md`.
-2.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). All unit tests for the feature must pass.
-3.  **Build & Integration Test:** Build the project and run integration tests to ensure the new code works correctly with other parts of the system.
-4.  **System & Acceptance Test:** Execute the automated and/or manual system-level tests as defined in the Test Plan. All acceptance criteria for the feature must be met.
-5.  **Regression Test:** After implementing a set of changes and before signaling completion to the user, run the *entire* existing test suite to ensure no existing functionality was broken.
-6.  **Update Checklist:** Once the task is complete and all tests have passed, update its status in the checklist.
-7.  **Update Handoff Files:** Update the handoff notes and open issues files with a summary of the changes and any new issues that arose.
-
-After completing one or more tasks, the agent will await the user's signal to commit the batched changes.
+**Phase-Driven Workflow:**
+The workflow for a single Development Phase is as follows:
+1.  **Identify Current Phase:** Determine the current Development Phase from the `Development Plan` and its corresponding checklist.
+2.  **Implement All Tasks in Phase:** For each task within the current phase:
+    a.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). Use the `change -> build -> test` cycle with `cargo` commands for rapid iteration. All unit tests for the feature must pass.
+    b.  **Update Checklist:** Once the individual task is complete and unit tests have passed, update its status in the checklist.
+3.  **Phase Integration and System Test:** After all tasks in the phase are implemented:
+    a.  **Build & Integration Test:** Build the entire system using the `scripts/build_system.sh` script. This ensures all components build correctly together.
+    b.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script. All acceptance criteria for the phase must be met.
+4.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
+5.  **Await Signal to Proceed:** Await user instruction to proceed to the next Development Phase or to commit the batched changes.
 
 ### 4.1. Test Output Workflow
 The agent must follow the test output management workflow for all tests that produce artifacts. This ensures consistency with the Release phase and allows for proper regression checking.
 
 1.  **Local Test Output Setup:** The agent must ensure the local (and git-ignored) test output directory `test_outs/<version>/` exists, containing a `reference/` and a `temp/` subfolder, as defined in `AGENTS.md`.
 2.  **Iterative Development & Testing:**
-    - For each test run that produces artifacts, the agent saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
+    - For each test run that produces artifacts (typically by running `scripts/run_system_test.sh`), the agent saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
 3.  **Candidate for Approval:**
     - When a task is complete, if new or changed test outputs were generated, the agent MUST present the **direct file path** to the final timestamped folder to the user for review.
 4.  **Approval & Cleanup:**
     - **Upon user approval:**
         1. The agent must copy the approved contents from the candidate folder into the local `reference/` folder, replacing or adding to the local reference set.
         2. **Cleanup Mandate:** The agent MUST delete the entire `temp/` directory and all its contents before the next commit.
+
+### 4.2. Post-Development Remediation Cycle
+After the agent has completed all tasks in all phases of the initial development checklist, it MUST begin a formal, iterative remediation cycle to ensure quality and completeness. This cycle is identified by an iteration ID (a, b, c, ...).
+
+The workflow for the remediation cycle is as follows:
+1.  **Feature and Function Audit:**
+    - The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist.
+    - The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
+    - The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
+    - After creating the audit document, the agent MUST stop and wait for further input from the user.
+
+2.  **Create Remediation Plan:**
+    - Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
+    - The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
+
+3.  **Execute Remediation Checklist:**
+    - The agent will execute the remediation checklist using the same phase-by-phase workflow defined in this guide.
+    - Upon completion of the remediation checklist, the agent will begin the next iteration of the remediation cycle (e.g., iteration 'b'), starting again with a new feature and function audit.
 
 ## 5. Conventions
 

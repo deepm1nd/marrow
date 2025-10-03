@@ -23,6 +23,14 @@ This guide outlines the Design Phase, where the technical vision for a system is
 ## 2. Goal
 The goal of this phase is to produce a comprehensive **Architecture Specification**. This document serves as the single source of truth for the system's design and is the primary input for the Planning Phase.
 
+### 2.1. Agent Workflow
+**MANDATE:** The agent's workflow for the Design Phase is as follows:
+1.  **Create the Architecture Specification:** The agent will create the initial `*_architecture_specification.md` document, following the outline in this guide.
+2.  **Perform Critical Self-Review:** After creating the initial draft, the agent MUST perform a second, critical review of the document. The agent must ask itself the following question:
+    > Is the architectural specification of the new features detailed enough for a software developer to plan and execute with a high degree of confidence of achieving the desired functionality?
+3.  **Apply Core Mandates:** During this review, the agent MUST strictly apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2). The specification must be implemented to its fullest, most robust, and most complete potential.
+4.  **Revise and Finalize:** Based on the self-review, the agent will revise the specification to address any gaps in detail, clarity, or robustness before presenting the final document to the user.
+
 ## 3. Best Practices for Design
 - **Iterate and Collaborate:** Design is not a solo activity. Collaborate with other engineers, stakeholders, and the user to refine the architecture. Use techniques like whiteboarding and workshops.
 - **Be Explicit:** Document everything clearly. Avoid ambiguity. The goal is to create a specification that is easy to understand and implement.

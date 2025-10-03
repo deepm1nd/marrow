@@ -16,7 +16,7 @@ This document lists the preferred dependencies for Rust projects. When designing
 # NOTE: The `tokio` runtime MUST NOT be used in WASM-based frontend applications.
 - yew
 - yew-router
-- material-yew
+- material-yew = { git = "https://github.com/constructableconcepts/material-yew", branch = "update-yew-0.21" } # Fork compatible with Yew 0.21.0
 
 ## WASM & Gloo
 - wasm-bindgen
