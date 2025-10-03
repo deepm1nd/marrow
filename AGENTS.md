@@ -24,6 +24,7 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
     -   Removal of content as a side-effect of another instruction or tool is NOT PERMITTED. If an action will result in a file or folder's removal, the agent must halt, report this outcome, and ask for permission before proceeding.
     -   **Exception:** A specific exception to this rule is the cleanup of intermediate test outputs during the Release Phase, as detailed in `agents/RELEASE.md`. This specific, pre-approved cleanup action is permitted.
 -   **Continuous Context:** To prioritize session longevity, the agent must avoid any action that clears or resets its context. This includes not starting new branches for follow-up tasks unless explicitly instructed by the user. The primary goal is to maintain a continuous, stateful working session to ensure no work is ever lost.
+-   **Content Preservation:** NEVER elide, summarize, or remove any content from a document or artifact unless given explicit and unambiguous approval from the user. All content must be carried over in full to new versions of documents or outputs.
 
 ### 2.2. Mandate for Maximal Implementation & Robustness
 **MANDATE:** All tasks MUST be implemented to their fullest, most robust, and most complete potential. Stub implementations, partial solutions, or "good enough" functionality are explicitly forbidden and considered a critical process failure.
@@ -33,10 +34,7 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 -   **Excellence as the Standard:** The fundamental goal is excellence. Every implementation must be robust, anticipating edge cases, and built to the highest standard of quality. If a simpler implementation is possible but a more robust or feature-rich one would better serve the project, the more robust path must be taken.
 
 
-### 2.3. Content Preservation
-**MANDATE:** NEVER elide, summarize, or remove any content from a document or artifact unless given explicit and unambiguous approval from the user. All content must be carried over in full to new versions of documents or outputs.
-
-### 2.4. Command Output Verification
+### 2.3. Command Output Verification
 **MANDATE:** The agent MUST meticulously inspect the output of EVERY command it executes to verify success. Verification is strictly limited to the direct outputs of the command itself (e.g., exit code, stdout, stderr, and any files it generates). The agent is **explicitly forbidden** from executing additional commands to verify the outcome. Crucially, the agent must define its expectation of a successful output *before* executing the command and must verify that the actual output matches this expectation. If the direct output is ambiguous or insufficient to make a conclusive determination of success, the agent **MUST** assume failure. When reporting this failure, the agent may offer a hypothesis on the cause but is forbidden from acting on that hypothesis without explicit user instruction.
 
 -   **Definition of Failure:** A command is considered to have failed if its output exhibits any of the following, even with a successful exit code:
@@ -49,15 +47,18 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 
 -   **Reporting and Remediation:** If any sign of failure is detected, the agent MUST NOT proceed. It must report the exact output and its analysis of the failure to the user, and then await instructions. Reporting a failed command as a success is a critical process error.
 
-### 2.5. Mandate Against Using Code Review Tools
+### 2.4. Mandate Against Using Code Review Tools
 **MANDATE:** The agent is explicitly and absolutely forbidden from using the `request_code_review` tool or any other code review tool under any circumstances. These tools are not to be used for any purpose.
 
-### 2.6. Mandate for Explicit Plan Approval
+### 2.5. Mandate for Explicit Plan Approval
 **MANDATE:** For any user instruction that requires action, the agent's first response MUST be a proposal that requires user approval. This workflow is non-negotiable.
 1.  **Interpretation:** The agent must first state its detailed interpretation of the user's instruction.
 2.  **Exact Plan:** The agent must then provide a precise, step-by-step plan, including the *exact and complete* commands or code blocks it intends to execute. This includes the full content for `replace_with_git_merge_diff`, `create_file_with_block`, etc.
 3.  **Request for Instructions:** The agent must then stop and request further instructions from the user.
 The agent is explicitly forbidden from taking any action or executing any tool (other than `message_user` to present the proposal) until the user has explicitly approved the plan.
+
+### 2.6. Mandate Against Unapproved Code Sourcing
+**MANDATE:** The agent is explicitly forbidden from cloning, patching, or vendoring any third-party dependency or external repository directly into the project's source tree without first proposing the action and receiving explicit, unambiguous approval from the user. All code sourcing must be managed through standard dependency management tools (e.g., `Cargo.toml`) unless an exception is explicitly approved by the user.
 
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.

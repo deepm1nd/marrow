@@ -87,6 +87,7 @@ This stage is an iterative cycle focused on producing a stable, high-quality, an
 2.  **Initial Local Reference Set:** The agent's first task is to run the `scripts/run_system_test.sh` script once. The outputs are stored in the local `reference/` directory. After self-verification, the agent must present the file path to this directory to the user for initial approval.
 3.  **Iterative Development & Testing:**
     - The user provides tasks for fixes or features.
+    - **No Stub Implementations:** When implementing these tasks, all code MUST be fully implemented. Placeholders, stubs, `todo!` macros, or any form of partial solution are strictly forbidden, in accordance with the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2).
     - For each subsequent test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
 4.  **Candidate for Approval:**
     - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder inside `temp/`.
