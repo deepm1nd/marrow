@@ -79,18 +79,14 @@ The agent must follow the test output management workflow for all tests that pro
 This cycle begins only when the user explicitly requests it by saying "perform an audit" or similar phrasing after the initial development is complete. The agent must not start this cycle proactively. The remediation process is fully iterative and is not considered "final." The user may request any number of audits. Each requested audit initiates a new iteration of the cycle, identified by an iteration ID (a, b, c, ...).
 
 The workflow for the remediation cycle is as follows:
-1.  **Feature and Function Audit:**
-    - The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist.
-    - The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
-    - The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
-    - **COMMIT POINT:** After creating the audit document, the agent MUST commit the document and await further user instruction.
+1.  **Audit and Create Remediation Plan:**
+    - **Audit:** The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist. The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
+    - **Create Audit Document:** The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
+    - **Create Remediation Plan:** Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
+    - **Create Remediation Prompt:** The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
+    - **COMMIT POINT:** After creating the audit document, remediation checklist, and remediation prompt, the agent MUST commit all of these files together and await further user instruction.
 
-2.  **Create Remediation Plan:**
-    - Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
-    - The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
-    - **COMMIT POINT:** After creating the remediation checklist and prompt, the agent MUST commit these files and await further user instruction.
-
-3.  **Execute Remediation Checklist:**
+2.  **Execute Remediation Checklist:**
     - The agent will execute the remediation checklist using the same phase-by-phase workflow defined in this guide.
     - **COMMIT POINT:** After each phase of the remediation checklist is complete and verified, the agent MUST commit the changes from that phase.
     - Upon completion of the entire remediation checklist, the agent MUST notify the user of completion and await further instructions, which may include a request for another audit (e.g., iteration 'b').
