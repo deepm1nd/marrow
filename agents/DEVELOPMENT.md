@@ -35,7 +35,7 @@ These are non-negotiable rules for the development process.
 - **Pre-commit Handoff File Updates:** Before any code is committed, all handoff files (`handoff_notes.md`, `open_issues.md`, etc.) MUST be updated to reflect the latest state of the project. This ensures seamless collaboration and session continuity.
 
 ## 4. Development Workflow
-The development process is iterative, checklist-driven, and structured into **Development Phases**. A Development Phase is a logical grouping of tasks defined in the Development Plan. The agent MUST complete all tasks within the current phase before proceeding to the next. All file changes within a phase should be batched. Commits will only be made when explicitly instructed by the user.
+The development process is iterative, checklist-driven, and structured into **Development Phases**. A Development Phase is a logical grouping of tasks defined in the Development Plan. The agent MUST complete all tasks within the current phase, and commit the changes, before proceeding to the next.
 
 **CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle for rapid, local verification:
 1. **Change:** Make the required code edits.
@@ -53,7 +53,14 @@ The workflow for a single Development Phase is as follows:
     a.  **Build & Integration Test:** Build the entire system using the `scripts/build_system.sh` script. This ensures all components build correctly together.
     b.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script. All acceptance criteria for the phase must be met.
 4.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
-5.  **Await Signal to Proceed:** Await user instruction to proceed to the next Development Phase or to commit the batched changes.
+5.  **Commit Phase Changes:** After all tests have passed and handoff files are updated, the agent MUST commit all changes from the completed phase.
+6.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
+
+**Completion of Initial Development:**
+After all phases in the `Development Plan` are complete, the agent MUST perform the following steps:
+1.  **Notify User:** Inform the user that all development tasks on the initial checklist are complete.
+2.  **Remind About Audit:** Remind the user that they may now (but are not required to) request a "feature audit" to initiate the iterative remediation cycle.
+3.  **Await Instruction:** Halt and await the user's instruction to either proceed with a commit or to start the audit.
 
 ### 4.1. Test Output Workflow
 The agent must follow the test output management workflow for all tests that produce artifacts. This ensures consistency with the Release phase and allows for proper regression checking.
@@ -69,22 +76,24 @@ The agent must follow the test output management workflow for all tests that pro
         2. **Cleanup Mandate:** The agent MUST delete the entire `temp/` directory and all its contents before the next commit.
 
 ### 4.2. Post-Development Remediation Cycle
-After the agent has completed all tasks in all phases of the initial development checklist, it MUST begin a formal, iterative remediation cycle to ensure quality and completeness. This cycle is identified by an iteration ID (a, b, c, ...).
+This cycle begins only when the user explicitly requests it by saying "perform an audit" or similar phrasing after the initial development is complete. The agent must not start this cycle proactively. The remediation process is fully iterative and is not considered "final." The user may request any number of audits. Each requested audit initiates a new iteration of the cycle, identified by an iteration ID (a, b, c, ...).
 
 The workflow for the remediation cycle is as follows:
 1.  **Feature and Function Audit:**
     - The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist.
     - The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
     - The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
-    - After creating the audit document, the agent MUST stop and wait for further input from the user.
+    - **COMMIT POINT:** After creating the audit document, the agent MUST commit the document and then stop and wait for further input from the user.
 
 2.  **Create Remediation Plan:**
     - Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
     - The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
+    - **COMMIT POINT:** After creating the remediation checklist and prompt, the agent MUST commit these files and then stop and wait for further input from the user.
 
 3.  **Execute Remediation Checklist:**
     - The agent will execute the remediation checklist using the same phase-by-phase workflow defined in this guide.
-    - Upon completion of the remediation checklist, the agent will begin the next iteration of the remediation cycle (e.g., iteration 'b'), starting again with a new feature and function audit.
+    - **COMMIT POINT:** After each phase of the remediation checklist is complete and verified, the agent MUST commit the changes from that phase.
+    - Upon completion of the entire remediation checklist, the agent MUST notify the user of completion and await further instructions, which may include a request for another audit (e.g., iteration 'b').
 
 ## 5. Conventions
 
