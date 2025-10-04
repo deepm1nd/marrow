@@ -51,7 +51,14 @@ The workflow for a single Development Phase is as follows:
     b.  **Update Checklist:** Once the individual task is complete and unit tests have passed, update its status in the checklist.
 3.  **Phase Integration and System Test:** After all tasks in the phase are implemented:
     a.  **Build & Integration Test:** Build the entire system using the `scripts/build_system.sh` script. This ensures all components build correctly together.
-    b.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script. All acceptance criteria for the phase must be met.
+    b.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script.
+    c.  **Mandatory Log Inspection:** Before making any conclusion about the test outcome (pass or fail), the agent MUST meticulously inspect all relevant logs. A test run is only considered valid after this inspection. This includes:
+        - Server logs (from the `tracing` instrumentation)
+        - Client logs (from the `tracing` instrumentation)
+        - Console output from the test runner
+        - Logs from any other system components
+        - Browser console logs (which must be enabled and captured by the verification scripts)
+    d.  **Verify Acceptance Criteria:** All acceptance criteria for the phase must be met, as confirmed by the test script outputs and log review.
 4.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
 5.  **Commit Phase Changes:** After all tests have passed and handoff files are updated, the agent MUST commit all changes from the completed phase.
 6.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
@@ -79,20 +86,16 @@ The agent must follow the test output management workflow for all tests that pro
 This cycle begins only when the user explicitly requests it by saying "perform an audit" or similar phrasing after the initial development is complete. The agent must not start this cycle proactively. The remediation process is fully iterative and is not considered "final." The user may request any number of audits. Each requested audit initiates a new iteration of the cycle, identified by an iteration ID (a, b, c, ...).
 
 The workflow for the remediation cycle is as follows:
-1.  **Feature and Function Audit:**
-    - The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist.
-    - The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
-    - The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
-    - **COMMIT POINT:** After creating the audit document, the agent MUST commit the document and then stop and wait for further input from the user.
+1.  **Audit and Create Remediation Plan:**
+    - **Audit:** The agent MUST perform a highly critical feature and function audit, comparing the code developed in the session against the architecture specification and the current development plan/checklist. The agent MUST apply the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2) during this audit.
+    - **Create Audit Document:** The agent MUST report its findings in a new audit document, stored in the `docs/` folder, named `feature_audit_[iteration_id].md` (e.g., `feature_audit_a.md`).
+    - **Create Remediation Plan:** Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
+    - **Create Remediation Prompt:** The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
+    - **COMMIT POINT:** After creating the audit document, remediation checklist, and remediation prompt, the agent MUST commit all of these files together and await further user instruction.
 
-2.  **Create Remediation Plan:**
-    - Based on the audit, the agent will create a new remediation checklist named `remediation_[iteration_id]_checklist.md` (e.g., `remediation_a_checklist.md`) in the `docs/` folder.
-    - The agent will also create or update a remediation prompt named `p_remediation_dev.md` in the `docs/` folder. This prompt must refer to the new audit file and remediation checklist.
-    - **COMMIT POINT:** After creating the remediation checklist and prompt, the agent MUST commit these files and then stop and wait for further input from the user.
-
-3.  **Execute Remediation Checklist:**
-    - The agent will execute the remediation checklist using the same phase-by-phase workflow defined in this guide.
-    - **COMMIT POINT:** After each phase of the remediation checklist is complete and verified, the agent MUST commit the changes from that phase.
+2.  **Execute Remediation Checklist:**
+    - The agent will execute the remediation checklist using the same phase-by-phase workflow defined in this guide, including the **Mandatory Log Inspection** protocol after every system test.
+    - **COMMIT POINT:** After each phase of the remediation checklist is complete and verified (including log inspection), the agent MUST commit the changes from that phase.
     - Upon completion of the entire remediation checklist, the agent MUST notify the user of completion and await further instructions, which may include a request for another audit (e.g., iteration 'b').
 
 ## 5. Conventions
