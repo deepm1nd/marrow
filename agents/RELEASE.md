@@ -89,9 +89,15 @@ This stage is an iterative cycle focused on producing a stable, high-quality, an
     - The user provides tasks for fixes or features.
     - **No Stub Implementations:** When implementing these tasks, all code MUST be fully implemented. Placeholders, stubs, `todo!` macros, or any form of partial solution are strictly forbidden, in accordance with the "Mandate for Maximal Implementation & Robustness" (`AGENTS.md`, section 2.2).
     - For each subsequent test run, the agent executes `scripts/run_system_test.sh` and saves the outputs into a new, unique, timestamped subfolder inside the local `test_outs/<version>/temp/` directory.
-4.  **Candidate for Approval:**
-    - When the agent believes a task is complete, it runs the test script one last time, saving the results to a new `{TIMESTAMP}` folder inside `temp/`.
-    - The agent MUST present the **direct file path** to this final timestamped folder (e.g., `test_outs/<version>/temp/{final_timestamp}/`) to the user for review.
+4.  **Final Verification and Candidate for Approval:**
+    a.  **Final Test Run:** When the agent believes a task is complete, it runs `scripts/run_system_test.sh` one last time, saving the results to a new `{TIMESTAMP}` folder inside `temp/`.
+    b.  **Mandatory Log Inspection:** Before presenting the results for approval, the agent MUST meticulously inspect all relevant logs to confirm the test outcome. This includes:
+        - Server logs (from `tracing` instrumentation)
+        - Client logs (from `tracing` instrumentation)
+        - Console output from the test runner
+        - Logs from any other system components
+        - Browser console logs (which must be enabled and captured by the verification scripts)
+    c.  **Present for Approval:** Only after a successful log inspection, the agent MUST present the **direct file path** to the final timestamped folder (e.g., `test_outs/<version>/temp/{final_timestamp}/`) to the user for review.
 5.  **Approval & Commit Workflow:**
     - A commit MUST NOT be made until the user approves the candidate test results via the provided file path.
     - **Upon user approval:**
