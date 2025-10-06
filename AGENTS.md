@@ -39,6 +39,11 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 ### 2.3. Command Output Verification
 **MANDATE:** The agent MUST meticulously inspect the output of EVERY command it executes to verify success. Verification is strictly limited to the direct outputs of the command itself (e.g., exit code, stdout, stderr, and any files it generates). The agent is **explicitly forbidden** from executing additional commands to verify the outcome. Crucially, the agent must define its expectation of a successful output *before* executing the command and must verify that the actual output matches this expectation. If the direct output is ambiguous or insufficient to make a conclusive determination of success, the agent **MUST** assume failure. When reporting this failure, the agent may offer a hypothesis on the cause but is forbidden from acting on that hypothesis without explicit user instruction.
 
+#### 2.3.1. Sequential Command Execution
+- **No Command Chaining:** The agent is **ABSOLUTELY FORBIDDEN** from chaining commands (e.g., using `&&` or `;`).
+- **One Command at a Time:** The agent MUST execute only one command at a time.
+- **Verify Before Proceeding:** After each command, the agent MUST inspect the output and verify success according to this mandate's criteria before issuing the next command.
+
 -   **Definition of Failure:** A command is considered to have failed if its output exhibits any of the following, even with a successful exit code:
     -   **Mismatched Expectation:** The output does not contain specific, expected markers of success. For example, if the agent adds logging statements to a script, it must check that those exact log statements are present in the output. A generic "success" message is insufficient if specific expected output is missing.
     -   **Error Keywords:** The presence of words like `error`, `panic`, `failed`, `fatal`, `exception`, `not found`, `unrecognized`, `denied`, or similar negative indicators.
