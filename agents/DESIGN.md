@@ -87,6 +87,12 @@ The following outline should be used as the structure for any `*_architecture_sp
   - **Formatting:** Where possible, logs should be color-coded by severity level for improved readability.
 - **Monitoring Strategy:** Outline the approach for monitoring the system's health and performance, including key metrics to track.
 
+#### 4.3.18. Primary Dependencies
+- **Dependency Identification:** This section must explicitly list the primary, high-impact dependencies for the project (e.g., web frameworks, database clients, core libraries).
+- **Rationale:** For each dependency, a clear rationale for its selection must be provided, including why it was chosen over viable alternatives.
+- **Source and Version:** The exact version number and source (e.g., `crates.io` version, git repository URL and branch/commit) must be specified for each dependency.
+- **Adherence to Preferred List:** The agent must adhere to the `agents/PREFERRED_DEPENDENCIES.md` guide. Any proposed dependency not on the preferred list requires explicit user approval, as per the general mandate.
+
 ### 4.4. External Interfaces & Integrations
 #### 4.4.1. External System Interfaces: Descriptions of how the system interacts with external systems or APIs.
 #### 4.4.2. Third-Party Integrations: Details on any third-party services or libraries used.

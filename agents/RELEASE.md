@@ -68,7 +68,7 @@ Any test-related tools or dependencies, such as message brokers, databases, or s
 Any tools, distributables, or packages needed to support the final deployment of the application are developed and prepared during this stage.
 
 ### 4.3. Test Stage
-This stage is an iterative cycle focused on producing a stable, high-quality, and user-approved release candidate. It follows the explicit workflow: **change -> local build/test -> system build -> system test**. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`). **MANDATE: No step in this workflow may be skipped. The agent MUST successfully complete local verification (`cargo build` and `cargo test`) before proceeding to a full system build (`scripts/build_system.sh`) and system test (`scripts/run_system_test.sh`).**
+This stage is an iterative cycle focused on producing a stable, high-quality, and user-approved release candidate. It follows the explicit workflow: **change -> system build -> system test**. At the beginning of this stage, a version and branch must be assigned (e.g., `alpha/v0.0.1`). **MANDATE: The agent MUST adhere to the SCRIPT EXCLUSIVITY MANDATE at all times. All builds must use `scripts/build_system.sh` and all tests must use `scripts/run_system_test.sh`. No other build or test commands are permitted without explicit user approval.**
 
 **Environment and Dependency Setup:**
 - **Primary Environment:** By default, all testing will be performed in a **direct environment** by running the application on the host machine.

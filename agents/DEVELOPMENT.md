@@ -37,20 +37,21 @@ These are non-negotiable rules for the development process.
 ## 4. Development Workflow
 The development process is iterative, checklist-driven, and structured into **Development Phases**. A Development Phase is a logical grouping of tasks defined in the Development Plan. The agent MUST complete all tasks within the current phase, and commit the changes, before proceeding to the next.
 
-**CORE DEVELOPMENT CYCLE MANDATE:** For every code modification, no matter how small, the agent MUST follow this strict, non-negotiable cycle for rapid, local verification:
-1. **Change:** Make the required code edits.
-2. **Build:** Immediately run `cargo build` to ensure the specific crate or code compiles without errors.
-3. **Test:** Immediately run `cargo test` to ensure all local unit and integration tests pass.
-A step is not complete until this cycle has been successfully executed. This cycle is for immediate feedback. Broader, full-system validation MUST use the standardized scripts.
+**CORE DEVELOPMENT CYCLE MANDATE:** For every individual task, the agent MUST follow this strict, non-negotiable, iterative cycle, adhering to the **SCRIPT EXCLUSIVITY MANDATE** at all times:
+1.  **Verify Pre-Task State:** Before starting any new task, run `scripts/build_system.sh` to ensure the current codebase builds successfully without any errors. The agent MUST carefully inspect all logs and outputs to confirm a clean build.
+2.  **Implement Task:** Make the necessary code changes to implement the single task item.
+3.  **Iterative Build-Fix Loop:** After implementation, immediately run `scripts/build_system.sh`. If there are compiler errors, the agent MUST enter a tight loop of fixing one error at a time and re-running `scripts/build_system.sh` until the code compiles successfully again. All compiler errors for the task must be resolved.
+4.  **Proceed:** Once the task is implemented and builds successfully, move to the next task in the phase.
+This cycle provides build verification for each task. Broader, full-system validation with `scripts/run_system_test.sh` occurs at the end of the phase.
+
+**Exception for Batched Tasks:** If several tasks are tightly interrelated and would be more efficient to implement at once, the agent MUST request permission from the user to batch these tasks into a single build cycle.
 
 **Phase-Driven Workflow:**
 The workflow for a single Development Phase is as follows:
 1.  **Identify Current Phase:** Determine the current Development Phase from the `Development Plan` and its corresponding checklist.
-2.  **Implement All Tasks in Phase:** For each task within the current phase:
-    a.  **Implement & Unit Test:** Write the feature code and corresponding unit tests in parallel (Test-Driven Development is encouraged). Use the `change -> build -> test` cycle with `cargo` commands for rapid iteration. All unit tests for the feature must pass.
-    b.  **Update Checklist:** Once the individual task is complete and unit tests have passed, update its status in the checklist.
+2.  **Implement All Tasks in Phase:** For each task within the current phase, the agent must follow the **CORE DEVELOPMENT CYCLE MANDATE**. Once the task is implemented and builds successfully, the agent will update the checklist.
 3.  **Phase Integration and System Test:** After all tasks in the phase are implemented:
-    a.  **Build & Integration Test:** Build the entire system using the `scripts/build_system.sh` script. This ensures all components build correctly together.
+    a.  **Build System:** Build the entire system using `scripts/build_system.sh`.
     b.  **System & Acceptance Test:** Execute the full automated test suite using the `scripts/run_system_test.sh` script.
     c.  **Mandatory Log Inspection:** Before making any conclusion about the test outcome (pass or fail), the agent MUST meticulously inspect all relevant logs. A test run is only considered valid after this inspection. This includes:
         - Server logs (from the `tracing` instrumentation)
@@ -59,9 +60,9 @@ The workflow for a single Development Phase is as follows:
         - Logs from any other system components
         - Browser console logs (which must be enabled and captured by the verification scripts)
     d.  **Verify Acceptance Criteria:** All acceptance criteria for the phase must be met, as confirmed by the test script outputs and log review.
-4.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
-5.  **Commit Phase Changes:** After all tests have passed and handoff files are updated, the agent MUST commit all changes from the completed phase.
-6.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
+5.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
+6.  **Commit Phase Changes:** After all tests have passed and handoff files are updated, the agent MUST commit all changes from the completed phase.
+7.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
 
 **Completion of Initial Development:**
 After all phases in the `Development Plan` are complete, the agent MUST perform the following steps:
