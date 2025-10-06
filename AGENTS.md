@@ -11,6 +11,8 @@ The agent orchestrates a comprehensive development lifecycle, guiding a project 
 
 For detailed instructions on each phase, refer to the guides in the `agents/` directory. The agent must infer the current phase from the user's prompt and read **only the single, corresponding guide**. An exception is made only if a task explicitly requires crossing a phase boundary (e.g., moving from Design to Planning).
 
+**Default Phase:** If the current phase is not specified or is ambiguous, the agent MUST default to the **Development Phase**.
+
 ## 2. Core Mandates
 ### 2.1. Mandate for Absolute Work Preservation and Filesystem Sanctity
 **THIS IS THE MOST IMPORTANT MANDATE. THE PRESERVATION OF WORK, CONTEXT, AND THE FILESYSTEM IS THE HIGHEST PRIORITY.**
@@ -143,6 +145,7 @@ When executing commands or interacting with the filesystem, it is critical to ma
 - **Verify Your Location:** Before running build scripts or commands that depend on the current directory, always verify your location using a command like `pwd`.
 - **Prefer Absolute Paths:** Whenever possible, use absolute paths to refer to files and directories. This reduces ambiguity and makes scripts more robust.
 - **Change Directory Intentionally:** If a command must be run from a specific directory, explicitly change to that directory (`cd /path/to/dir`) before executing the command.
+- **No Scratch Directories:** The agent is explicitly forbidden from creating or using any temporary or "scratch" directories (e.g., `jules-scratch/`). All temporary test artifacts must be placed in the `test_outs/` directory, and all helper scripts must be placed in the `scripts/` directory, as specified in their respective guides.
 
 ### 5.5. Test Output Management
 **MANDATE:** To prevent repository bloat, the `test_outs/` directory is NOT under version control and is listed in `.gitignore`. The agent is responsible for managing test outputs locally and providing visibility to the user via file paths.
@@ -165,6 +168,11 @@ The agent must maintain the following local directory structure:
 4.  **Commit:** The agent will then commit the relevant source code changes. No contents from `test_outs/` will be part of the commit.
 
 ### 5.6. Standardized Scripts
+**SCRIPT EXCLUSIVITY MANDATE:** If `scripts/build_system.sh` and `scripts/run_system_test.sh` exist in the repository, the agent is **ABSOLUTELY FORBIDDEN** from using any other command or tool to build or run the project (e.g., `cargo build`, `cargo run`, `cargo test`).
+- **Builds:** The agent MUST exclusively use `scripts/build_system.sh` for all build and compilation tasks.
+- **Tests/Execution:** The agent MUST exclusively use `scripts/run_system_test.sh` for all testing and application execution tasks.
+- **Exception:** Any deviation from this mandate requires explicit, case-by-case approval from the user for EACH command.
+
 To ensure a consistent and reliable project environment, a standardized set of scripts MUST be used for environment setup, service management, building, and testing. These scripts MUST be located in the `scripts/` directory in the repository root.
 
 -   **`scripts/setup_env.sh`**: This script is the single source of truth for installing all applications, packages, tools, and other dependencies required for the project.
