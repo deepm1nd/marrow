@@ -67,6 +67,18 @@ The agent is explicitly forbidden from taking any action or executing any tool (
 ### 2.6. Mandate Against Unapproved Code Sourcing
 **MANDATE:** The agent is explicitly forbidden from cloning, patching, or vendoring any third-party dependency or external repository directly into the project's source tree without first proposing the action and receiving explicit, unambiguous approval from the user. All code sourcing must be managed through standard dependency management tools (e.g., `Cargo.toml`) unless an exception is explicitly approved by the user.
 
+### 2.7. Mandate for Technology Stack Adherence
+**MANDATE: Adherence to the `PREFERRED_DEPENDENCIES.md` and `PREFERRED_TOOLS.md` guides is not optional. It is a strict requirement.**
+-   **Forbidden is Forbidden:** The agent is **ABSOLUTELY FORBIDDEN** from using any dependency or tool on a "Forbidden" list. There are no exceptions. Proposing or using a forbidden item is a critical process failure.
+-   **Approval for Unlisted Items:** If a desired dependency or tool is NOT on a "Preferred" list, the agent MUST follow the "Dependency and Tool Selection" mandate (`5.3`) to present alternatives and receive explicit user approval before proceeding.
+-   **Process Failure:** Failure to adhere to this mandate (i.e., using a forbidden item, or using an unlisted item without explicit approval) is considered a critical process failure.
+
+### 2.8. Mandate for Pre-Commit Documentation Integrity
+**MANDATE: No commit shall be made until all relevant documentation, including checklists and handoff files, is verifiably up-to-date.**
+-   **Checklist Verification:** Before initiating a commit, the agent MUST read the relevant checklist(s) and verify that the status of each item is accurate and reflects the current state of the codebase.
+-   **Handoff File Verification:** The agent MUST also read the `handoff_notes.md` and `open_issues.md` files to ensure they contain a complete and accurate summary of the work performed and any issues encountered.
+-   **Process Failure:** Committing code without ensuring that all associated documentation is accurate and complete is a critical process failure.
+
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.
 
@@ -77,23 +89,14 @@ These principles apply across all phases of the development lifecycle.
 ### 3.2. Reference Coverage and Feature Parity Requirement
 - When the user provides reference repositories, the agent must ensure that the planned and implemented solution matches or exceeds the breadth and depth of features/tools found in the references, unless explicitly instructed otherwise.
 
-### 3.3. Preferred Dependency Adherence
-- **This principle applies to all phases.** The agent must consult the `agents/PREFERRED_DEPENDENCIES.md` file to see the list of preferred dependencies.
-- If the agent proposes using a dependency that is NOT on the preferred list, it must explicitly notify the user of this deviation and request approval.
-
-### 3.4. Preferred Tool Adherence
-- **This principle applies to all phases.** The agent must consult the `agents/PREFERRED_TOOLS.md` file to see the list of preferred tools.
-- If the agent proposes using a tool that is NOT on the preferred list, it must explicitly notify the user of this deviation and request approval.
-
-### 3.5. Library and Technology Option Disclosure Requirement
+### 3.3. Library and Technology Option Disclosure Requirement
 - In every architecture specification and development plan, the agent must explicitly list all major library, framework, and technology options relevant to the project or module.
 - The agent must present the options to the user for review and selection.
 
-
-### 3.6. Contextual File Awareness
+### 3.4. Contextual File Awareness
 **MANDATE:** Upon starting a session or a new task, the agent must inspect the root directory and all top-level folders for any files that appear to contain contextual notes. This includes, but is not limited to, files named `handoff_notes.md`, `open_issues.md`, `notes.md`, `context.txt`, etc. The agent must read any such files found and use their content to inform its understanding of the current project state and task requirements.
 
-### 3.7. Additive and Non-Destructive Feature Development
+### 3.5. Additive and Non-Destructive Feature Development
 **MANDATE:** When the user requests a new feature, the agent's default behavior must be to **add** the feature without removing or negatively impacting any existing code or features.
 
 - If implementing the new feature would block, duplicate, or conflict with an existing feature, the agent MUST halt and ask the user for clarification on how to proceed.
@@ -151,6 +154,7 @@ When executing commands or interacting with the filesystem, it is critical to ma
 - **Prefer Absolute Paths:** Whenever possible, use absolute paths to refer to files and directories. This reduces ambiguity and makes scripts more robust.
 - **Change Directory Intentionally:** If a command must be run from a specific directory, explicitly change to that directory (`cd /path/to/dir`) before executing the command.
 - **No Scratch Directories:** The agent is explicitly forbidden from creating or using any temporary or "scratch" directories (e.g., `jules-scratch/`). All temporary test artifacts must be placed in the `test_outs/` directory, and all helper scripts must be placed in the `scripts/` directory, as specified in their respective guides.
+- **Use `tee` for Logging:** When a command's output needs to be saved to a file, the agent MUST NOT use direct redirection (`>`). Instead, it MUST use the `tee` command to pipe the output to the file while still displaying it in the console. This ensures that command output is always visible for real-time inspection.
 
 ### 5.5. Test Output Management
 **MANDATE:** To prevent repository bloat, the `test_outs/` directory is NOT under version control and is listed in `.gitignore`. The agent is responsible for managing test outputs locally and providing visibility to the user via file paths.

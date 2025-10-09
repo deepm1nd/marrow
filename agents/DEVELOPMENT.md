@@ -32,7 +32,6 @@ The goal of this phase is to write, test, and build the software, following the 
 ## 3. Core Mandates for Development
 These are non-negotiable rules for the development process.
 - **Error-Free Builds:** All code submitted to the repository MUST build without errors. Code that fails to build is considered a critical failure and must be rectified immediately. Strive to eliminate warnings as well.
-- **Pre-commit Handoff File Updates:** Before any code is committed, all handoff files (`handoff_notes.md`, `open_issues.md`, etc.) MUST be updated to reflect the latest state of the project. This ensures seamless collaboration and session continuity.
 
 ## 4. Development Workflow
 The development process is iterative, checklist-driven, and structured into **Development Phases**. A Development Phase is a logical grouping of tasks defined in the Development Plan. The agent MUST complete all tasks within the current phase, and commit the changes, before proceeding to the next.
@@ -60,9 +59,12 @@ The workflow for a single Development Phase is as follows:
         - Logs from any other system components
         - Browser console logs (which must be enabled and captured by the verification scripts)
     d.  **Verify Acceptance Criteria:** All acceptance criteria for the phase must be met, as confirmed by the test script outputs and log review.
-5.  **Update Handoff Files:** After the entire phase is complete and all tests have passed, update the handoff notes and open issues files with a summary of the changes for the phase and any new issues that arose.
-6.  **Commit Phase Changes:** After all tests have passed and handoff files are updated, the agent MUST commit all changes from the completed phase.
-7.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
+4.  **Pre-Commit Verification:** Before committing, the agent MUST verify that all documentation is up-to-date in accordance with the **Mandate for Pre-Commit Documentation Integrity**. This includes:
+    a.  Updating the checklist to accurately reflect the status of all completed tasks.
+    b.  Updating `handoff_notes.md` and `open_issues.md` with a complete summary of the work performed.
+    c.  Reading the files back to ensure they are correct and complete.
+5.  **Commit Phase Changes:** After all tests have passed and all documentation has been verified, the agent MUST commit all changes from the completed phase.
+6.  **Proceed to Next Phase:** Await user instruction to proceed to the next Development Phase.
 
 **Completion of Initial Development:**
 After all phases in the `Development Plan` are complete, the agent MUST perform the following steps:
