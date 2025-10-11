@@ -31,7 +31,7 @@ The goal of this phase is to write, test, and build the software, following the 
 The development process is iterative and checklist-driven.
 
 ### 5.1. Core Development Cycle
-For every individual task, the agent MUST follow the iterative build-fix loop defined in `agents/SCRIPT_RULES.md`.
+For every individual task, which corresponds to a "software unit" as defined in the `DESIGN.md` guide, the agent MUST follow the iterative build-fix loop defined in `agents/SCRIPT_RULES.md`.
 
 **Exception for Batched Tasks:** If several tasks are tightly interrelated and would be more efficient to implement at once, the agent MUST request permission from the user to batch these tasks into a single build cycle.
 
@@ -54,6 +54,9 @@ This cycle begins only when the user explicitly requests it by saying "perform a
 2.  **Execute Remediation Checklist:** The agent will execute the remediation checklist using the phase-by-phase workflow.
     -   **COMMIT POINT:** After each phase of the remediation checklist is complete and verified, the agent MUST commit the changes.
     -   Upon completion, the agent MUST notify the user and await further instructions.
+
+## 6. Phase Completion Criteria
+This phase is complete when all tasks in the `Development Plan` have been implemented, built, and committed, and the project is ready to proceed to the Verification Phase.
 
 ---
 

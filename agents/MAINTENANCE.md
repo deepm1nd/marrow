@@ -22,32 +22,32 @@ This guide outlines the Maintenance Phase, which is not a passive monitoring per
 The goal of this phase is to provide a structured, iterative framework for the ongoing evolution of the software. It ensures that new features and fixes are integrated into the existing architecture and released in a controlled manner.
 
 ## 3. The Maintenance Lifecycle: A Mini-Project Workflow
-The Maintenance Phase is a microcosm of the entire development lifecycle, applied to a smaller scope.
+The Maintenance Phase is a microcosm of the entire development lifecycle, applied to a smaller scope. Each stage in this lifecycle is a direct application of the corresponding phase guide, but focused on the specific maintenance task.
 
 ### 3.1. Stage 1: Feature Intake
 The cycle begins when the user provides a description or list of new features or bug fixes to be implemented (e.g., by referencing a feature proposal document).
 
 ### 3.2. Stage 2: Architecture Update (Design)
 The agent analyzes the requested features and proposes additive changes to the existing `Architecture Specification`.
--   **Process:** This includes adding new functional and non-functional requirements with unique IDs, and defining their corresponding acceptance criteria.
+-   **Process:** This stage is a direct application of the `DESIGN.md` guide. It includes adding new functional and non-functional requirements with unique IDs, and defining their corresponding acceptance criteria.
 -   **Approval:** This is an iterative process that requires explicit user approval for the proposed architectural changes before proceeding.
 
 ### 3.3. Stage 3: Scoped Planning
 Once the architecture changes are approved, the agent creates a new, scoped `Development Plan`, `Checklist`, and `Prompt` specifically for the new features.
--   **Process:** The agent will follow the workflow defined in the `agents/DESIGN.md` guide, but scoped only to the newly approved requirements.
+-   **Process:** This stage is a direct application of the `DESIGN.md` guide, but scoped only to the newly approved requirements.
 -   **Approval:** This stage is also iterative and requires explicit user approval.
 
 ### 3.4. Stage 4: Scoped Development
 The agent executes the scoped development plan to implement the new features.
--   **Process:** The agent will follow the workflow defined in `agents/DEVELOPMENT.md`.
+-   **Process:** This stage is a direct application of the `DEVELOPMENT.md` guide.
 
 ### 3.5. Stage 5: Scoped Verification
 The newly developed features are verified against their corresponding acceptance criteria.
--   **Process:** The agent will follow the workflow defined in `agents/VERIFICATION.md`, using the parameterized test runner to execute tests for the new requirement IDs.
+-   **Process:** This stage is a direct application of the `VERIFICATION.md` guide, using the parameterized test runner to execute tests for the new requirement IDs.
 
 ### 3.6. Stage 6: Incremental Release
 The project, with its new features, is released with an incremented version number.
--   **Process:** The agent will follow the workflow defined in `agents/RELEASE.md`.
+-   **Process:** This stage is a direct application of the `RELEASE.md` guide.
 
 ---
 
