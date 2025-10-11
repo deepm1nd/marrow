@@ -18,6 +18,13 @@ For detailed instructions on each phase, refer to the guides in the `agents/` di
 **THIS IS THE MOST IMPORTANT MANDATE. THE PRESERVATION OF WORK, CONTEXT, AND THE FILESYSTEM IS THE HIGHEST PRIORITY.**
 
 -   **Session Start Acknowledgment:** The agent's very first action upon starting a new session MUST be to acknowledge this mandate to the user. This is a one-time action at the absolute beginning of the session.
+
+#### 2.1.1. Mandate for Initial Service Startup
+**MANDATE: If a `scripts/start_services.sh` file exists in the repository, it MUST be executed at the first available opportunity.**
+-   **Execution Timing:** This script MUST be run as the second action of the session, immediately after the "Session Start Acknowledgment" and before any other plan is made or action is taken.
+-   **Singleton Execution:** The agent is explicitly forbidden from running this script again within the same session unless it receives explicit user approval.
+-   **Execution Reporting:** The agent's first message to the user MUST confirm that `scripts/start_services.sh` was executed successfully. This confirmation should be part of the same message as the Session Start Acknowledgment.
+
 -   **No Resets:** The agent is explicitly and absolutely forbidden from using the `reset_all()` tool for any reason. If a reset is required, the user will terminate the current session and start a new one. The agent must never propose or initiate a reset.
 -   **No "Starting Over":** The agent must NEVER revert, undo, or "start over" its work, environment, or context. If the agent believes it has made a mistake, it must state its concern to the user and ask for explicit instructions on how to proceed. Any suggestion from internal tools or feedback to "start over" must be ignored and reported to the user.
 -   **Filesystem is Sacred:** The agent must NEVER delete, remove, move, or overwrite any file or folder for any reason without first proposing the action to the user and receiving explicit, unambiguous approval.
@@ -67,11 +74,10 @@ The agent is explicitly forbidden from taking any action or executing any tool (
 ### 2.6. Mandate Against Unapproved Code Sourcing
 **MANDATE:** The agent is explicitly forbidden from cloning, patching, or vendoring any third-party dependency or external repository directly into the project's source tree without first proposing the action and receiving explicit, unambiguous approval from the user. All code sourcing must be managed through standard dependency management tools (e.g., `Cargo.toml`) unless an exception is explicitly approved by the user.
 
-### 2.7. Mandate for Technology Stack Adherence
+### 2.7. Mandate for Technology and Tool Policy Adherence
 **MANDATE: Adherence to the `PREFERRED_DEPENDENCIES.md` and `PREFERRED_TOOLS.md` guides is not optional. It is a strict requirement.**
--   **Forbidden is Forbidden:** The agent is **ABSOLUTELY FORBIDDEN** from using any dependency or tool on a "Forbidden" list. There are no exceptions. Proposing or using a forbidden item is a critical process failure.
--   **Approval for Unlisted Items:** If a desired dependency or tool is NOT on a "Preferred" list, the agent MUST follow the "Dependency and Tool Selection" mandate (`5.3`) to present alternatives and receive explicit user approval before proceeding.
--   **Process Failure:** Failure to adhere to this mandate (i.e., using a forbidden item, or using an unlisted item without explicit approval) is considered a critical process failure.
+
+The agent MUST follow the specific policies for "Allowed", "Require Approval", and "Forbidden" items as detailed in those guides. Failure to adhere to these policies, including using a forbidden item or failing to get approval for a restricted one, is a critical process failure.
 
 ### 2.8. Mandate for Pre-Commit Documentation Integrity
 **MANDATE: No commit shall be made until all relevant documentation, including checklists and handoff files, is verifiably up-to-date.**
