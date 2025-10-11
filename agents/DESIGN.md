@@ -65,6 +65,12 @@ The development plan MUST decompose the architecture and its requirements down t
 -   **Definition of a Software Unit:** A software unit is the smallest, indivisible component of a software program, defined according to a specific standard or architecture. A unit is a finite group of operations that together perform a function or task. In no case should a unit be larger than a single source code file.
 -   **Unit Requirements:** Each unit defined in the development plan must have its own specific, traceable requirements derived from the main architecture specification.
 
+## 6. Phase Completion Criteria
+This phase is complete when:
+1.  The `Architecture Specification` has been created and approved by the user.
+2.  The `Development Plan` has been created and approved by the user.
+3.  The `Development Checklist` has been generated from the development plan.
+
 ---
 
 ## Appendix R - Revision History

@@ -8,8 +8,7 @@ v.0.0.01
 - [4. System Architecture](#4-system-architecture)
 - [5. External Interfaces & Integrations](#5-external-interfaces--integrations)
 - [6. Constraints & Assumptions](#6-constraints--assumptions)
-- [7. Verification & Validation](#7-verification--validation)
-- [8. Appendices (Optional)](#8-appendices-optional)
+- [7. Appendices (Optional)](#7-appendices-optional)
 - [Appendix R - Revision History](#appendix-r---revision-history)
 
 ---
@@ -52,6 +51,11 @@ v.0.0.01
 ### 4.15. Component Responsibility Collaborator (CRC) Cards
 ### 4.16. Sequence Diagrams
 ### 4.17. Logging and Monitoring
+- **Logging Strategy:** This section must detail the system-wide logging strategy.
+  - **Log Levels:** The design must incorporate an 8-level logging system: Emergency, Alert, Critical, Error, Warning, Notice, Informational, Debug.
+  - **Default Level:** The default logging level at application launch must be `NOTICE`.
+  - **Configuration:** The logging level must be configurable at launch.
+- **Monitoring Strategy:** Outline the approach for monitoring the system's health and performance, including key metrics to track.
 ### 4.18. Primary Dependencies
 
 ## 5. External Interfaces & Integrations
@@ -65,13 +69,9 @@ v.0.0.01
 ### 6.3. Assumptions
 ### 6.4. Dependencies
 
-## 7. Verification & Validation
-### 7.1. Acceptance Criteria
-### 7.2. Testability Considerations
-
-## 8. Appendices (Optional)
-### 8.1. Glossary of Terms
-### 8.2. Detailed Diagrams
+## 7. Appendices (Optional)
+### 7.1. Glossary of Terms
+### 7.2. Detailed Diagrams
 
 ---
 
