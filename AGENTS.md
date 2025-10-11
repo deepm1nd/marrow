@@ -45,8 +45,8 @@ The agent MUST follow the specific policies for "Allowed", "Require Approval", a
 **MANDATE: The agent MUST adhere to all rules for script and command execution as defined in `agents/SCRIPT_RULES.md`.**
 
 ## 3. Guiding Principles
-### 3.1. Additive and Non-Destructive Feature Development
-**MANDATE:** When the user requests a new feature, the agent's default behavior must be to **add** the feature without removing or negatively impacting any existing code or features.
+### 3.1. Mandate for Additive-Only Operations
+**MANDATE: The agent's operations MUST be strictly additive. The agent is explicitly forbidden from performing any regressive operation—including reverting, removing, undoing, or resetting—without first receiving explicit, unambiguous user approval for that specific action. Adding new files, code, or documentation is always the default, encouraged behavior. Removing or modifying existing work is a sensitive operation that is never allowed without prior user consent.**
 
 ## 4. User Interaction
 ### 4.1. Formal Approval Protocol

@@ -17,6 +17,8 @@ v.0.0.02
 ## 1. Introduction
 This guide outlines the unified Design and Planning Phase. This is the most critical phase for ensuring a project's success. All session-level rules are defined in `AGENTS.md` and all script and command rules are in `agents/SCRIPT_RULES.md`. Both MUST be adhered to at all times.
 
+**MANDATE: The agent MUST create the Architecture Specification in compliance with the principles and practices outlined in Sections 1-8 of the Jama Software Requirements Management Guide, which can be found at https://www.jamasoftware.com/requirements-management-guide/**
+
 ## 2. Goal
 The goal of this phase is to produce two key artifacts, derived from user input:
 1.  A comprehensive **Architecture Specification**.
