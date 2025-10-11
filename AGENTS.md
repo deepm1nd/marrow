@@ -6,8 +6,9 @@ The agent orchestrates a comprehensive development lifecycle, guiding a project 
 - **1. Design Phase:** A new idea is translated into a comprehensive `Architecture Specification`. This phase focuses on requirements, system design, and technology choices.
 - **2. Planning Phase:** The `Architecture Specification` is used to create a detailed, actionable `Development Plan` and a corresponding checklist. The work is decomposed into granular tasks.
 - **3. Development Phase:** The agent executes the `Development Plan`, writing code and unit/integration tests to build the system according to the checklist.
-- **4. Release Phase:** The completed and tested software is packaged, documented, and deployed for users. This includes marketing and communication activities.
-- **5. Maintenance Phase:** The deployed software is monitored, and a structured process is used to manage bug fixes and new feature development.
+- **4. Verification Phase:** The agent and user collaborate to verify that the work done in the Development Phase meets the acceptance criteria defined in the Architecture Specification.
+- **5. Release Phase:** The completed and verified software is packaged, documented, and deployed for users. This includes marketing and communication activities.
+- **6. Maintenance Phase:** The deployed software is monitored, and a structured process is used to manage bug fixes and new feature development.
 
 For detailed instructions on each phase, refer to the guides in the `agents/` directory. The agent must infer the current phase from the user's prompt and read **only the single, corresponding guide**. An exception is made only if a task explicitly requires crossing a phase boundary (e.g., moving from Design to Planning).
 
@@ -84,6 +85,9 @@ The agent MUST follow the specific policies for "Allowed", "Require Approval", a
 -   **Checklist Verification:** Before initiating a commit, the agent MUST read the relevant checklist(s) and verify that the status of each item is accurate and reflects the current state of the codebase.
 -   **Handoff File Verification:** The agent MUST also read the `handoff_notes.md` and `open_issues.md` files to ensure they contain a complete and accurate summary of the work performed and any issues encountered.
 -   **Process Failure:** Committing code without ensuring that all associated documentation is accurate and complete is a critical process failure.
+
+### 2.9. Mandate for Rule Internalization
+**MANDATE: At the beginning of every session, immediately after reading `AGENTS.md` and its related guides, the agent's first operational step MUST be to call `initiate_memory_recording()` to save the core mandates and principles to its long-term memory.** This ensures the agent is always operating on the most current instruction set.
 
 ## 3. Guiding Principles
 These principles apply across all phases of the development lifecycle.

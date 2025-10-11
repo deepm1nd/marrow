@@ -69,8 +69,7 @@ The workflow for a single Development Phase is as follows:
 **Completion of Initial Development:**
 After all phases in the `Development Plan` are complete, the agent MUST perform the following steps:
 1.  **Notify User:** Inform the user that all development tasks on the initial checklist are complete.
-2.  **Remind About Audit:** Remind the user that they may now (but are not required to) request a "feature audit" to initiate the iterative remediation cycle.
-3.  **Await Instruction:** Halt and await the user's instruction to either proceed with a commit or to start the audit.
+2.  **Await Instruction:** Halt and await the user's instruction to either proceed to the **Verification Phase** or to start a post-development remediation cycle (by requesting a "feature audit").
 
 ### 4.1. Test Output Workflow
 The agent must follow the test output management workflow for all tests that produce artifacts. This ensures consistency with the Release phase and allows for proper regression checking.

@@ -51,34 +51,47 @@ The following outline should be used as the structure for any `*_architecture_sp
 ### 4.2. Product & User Requirements
 #### 4.2.1. Target Audience & User Personas: Detailed profiles of key users and their needs.
 #### 4.2.2. User Scenarios / Use Cases: Descriptions of how users will interact with the system to achieve their goals.
-#### 4.2.3. Core Functional Requirements: Detailed list of what the system must do, often expressed as user stories with acceptance criteria.
-#### 4.2.4. Non-Functional Requirements (Product-Level): Expectations for performance (e.g., response times), security (e.g., data privacy), usability (e.g., ease of learning), reliability, and scalability from a user/business perspective.
-#### 4.2.5. Out-of-Scope Features: Features explicitly not being built in this iteration or project.
-#### 4.2.6. User-Centric Acceptance Criteria: For each User Scenario / Use Case, a list of high-level, user-focused acceptance criteria must be defined. These criteria answer the question: "How do we know this feature is working correctly from a user's perspective?" and form the basis for system-level tests. They should be written in a Gherkin-style format (Given/When/Then) where possible.
+#### 4.2.3. Core Functional Requirements
+**MANDATE:** This section MUST contain a detailed list of what the system must do.
+-   **Requirement ID:** Each requirement MUST have a unique, machine-readable ID (e.g., `PROJ-FUNC-REQ-0001`).
+-   **Clarity:** Each requirement MUST be written clearly and concisely.
 
-### 4.3. System Architecture
-#### 4.3.1. Architectural Goals & Constraints: Drivers influencing the technical design (e.g., high availability, low latency, cost-effectiveness).
-#### 4.3.2. Architectural Principles: Underlying design philosophies (e.g., modularity, loose coupling, microservices, event-driven).
-#### 4.3.3. System Context Diagram: A C4 Level 1 diagram showing the system's boundaries, its users (actors), and its interactions with other systems.
-#### 4.3.4. Modular Decomposition Diagram: C4 Level 2 (Container) and Level 3 (Component) diagrams that break down the system into its major building blocks and show their responsibilities and interactions.
-#### 4.3.5. Logical View (Component Diagram): Major components/modules of the system, their responsibilities, and how they relate to each other.
-#### 4.3.6. Process View (Runtime/Concurrency Diagram): How components interact at runtime, focusing on processes, threads, and concurrency.
-#### 4.3.7. Physical View (Deployment Diagram): The mapping of software components to hardware and network infrastructure.
-#### 4.3.8. Data View (High-Level Schema & Data Flow): Major data entities, data stores, and the flow of data through the system.
-#### 4.3.9. Data Models: A description of the system's data, including Conceptual, Logical, and Physical models.
-#### 4.3.10. Key Architectural Decisions & Rationale: Documentation of significant technical choices (e.g., specific technologies, design patterns) and the reasoning behind them, including alternatives considered.
-#### 4.3.11. Architecture Decision Records (ADRs): A log of all significant architectural decisions made for the project. Each ADR should capture the context, decision, and consequences.
-#### 4.3.12. Paths Not Taken: As part of the ADRs, this section explicitly documents alternative solutions that were considered and the reasons they were rejected.
-#### 4.3.13. Technical Non-Functional Requirements: Detailed technical specifications for performance (e.g., specific latency targets, throughput metrics), security (e.g., encryption algorithms, authentication protocols), scalability (e.g., horizontal scaling strategy), reliability, and maintainability.
-#### 4.3.14. User Experience (UX) & User Interface (UI) Design
+#### 4.2.4. Non-Functional Requirements
+**MANDATE:** This section MUST contain a detailed list of the system's non-functional requirements (e.g., performance, security, reliability).
+-   **Requirement ID:** Each requirement MUST have a unique, machine-readable ID (e.g., `PROJ-NFR-REQ-0001`).
+-   **Clarity:** Each requirement MUST be written clearly and concisely.
+
+#### 4.2.5. Out-of-Scope Features: Features explicitly not being built in this iteration or project.
+
+### 4.3. Acceptance Criteria
+**MANDATE:** This section is mandatory and MUST contain the detailed acceptance criteria for every functional and non-functional requirement defined in section 4.2.
+-   **Structure:** This section MUST contain a subsection for each requirement, identified by its unique Requirement ID.
+-   **Verifiability:** Each acceptance criterion MUST be detailed, unambiguous, and verifiable through a script, screenshot, or other concrete method. Multiple acceptance criteria per requirement are encouraged.
+-   **Purpose:** These criteria form the basis for the Verification Phase and are used to prove that the implementation meets the requirements.
+
+### 4.4. System Architecture
+#### 4.4.1. Architectural Goals & Constraints: Drivers influencing the technical design (e.g., high availability, low latency, cost-effectiveness).
+#### 4.4.2. Architectural Principles: Underlying design philosophies (e.g., modularity, loose coupling, microservices, event-driven).
+#### 4.4.3. System Context Diagram: A C4 Level 1 diagram showing the system's boundaries, its users (actors), and its interactions with other systems.
+#### 4.4.4. Modular Decomposition Diagram: C4 Level 2 (Container) and Level 3 (Component) diagrams that break down the system into its major building blocks and show their responsibilities and interactions.
+#### 4.4.5. Logical View (Component Diagram): Major components/modules of the system, their responsibilities, and how they relate to each other.
+#### 4.4.6. Process View (Runtime/Concurrency Diagram): How components interact at runtime, focusing on processes, threads, and concurrency.
+#### 4.4.7. Physical View (Deployment Diagram): The mapping of software components to hardware and network infrastructure.
+#### 4.4.8. Data View (High-Level Schema & Data Flow): Major data entities, data stores, and the flow of data through the system.
+#### 4.4.9. Data Models: A description of the system's data, including Conceptual, Logical, and Physical models.
+#### 4.4.10. Key Architectural Decisions & Rationale: Documentation of significant technical choices (e.g., specific technologies, design patterns) and the reasoning behind them, including alternatives considered.
+#### 4.4.11. Architecture Decision Records (ADRs): A log of all significant architectural decisions made for the project. Each ADR should capture the context, decision, and consequences.
+#### 4.4.12. Paths Not Taken: As part of the ADRs, this section explicitly documents alternative solutions that were considered and the reasons they were rejected.
+#### 4.4.13. Technical Non-Functional Requirements: Detailed technical specifications for performance (e.g., specific latency targets, throughput metrics), security (e.g., encryption algorithms, authentication protocols), scalability (e.g., horizontal scaling strategy), reliability, and maintainability.
+#### 4.4.14. User Experience (UX) & User Interface (UI) Design
 (Include this section for projects containing a UI/UX element)
-##### 4.3.14.1. Key User Journeys / Workflows: Diagrams illustrating critical user paths through the application.
-##### 4.3.14.2. High-Level Wireframes / Mockups: Visual representations of key screens and their layouts.
-##### 4.3.14.3. Interaction Design Overview: General principles for how users will interact with the interface.
-##### 4.3.14.4. Visual Design & Style Guide (Overview): Key elements of the visual design, such as color palette, typography, and iconography, or a reference to a detailed style guide.
-#### 4.3.15. Component Responsibility Collaborator (CRC) Cards: A collection of CRC cards for the key components, detailing their responsibilities and collaborators.
-#### 4.3.16. Sequence Diagrams: UML Sequence Diagrams for key scenarios to illustrate how components interact to fulfill a use case.
-#### 4.3.17. Logging and Monitoring
+##### 4.4.14.1. Key User Journeys / Workflows: Diagrams illustrating critical user paths through the application.
+##### 4.4.14.2. High-Level Wireframes / Mockups: Visual representations of key screens and their layouts.
+##### 4.4.14.3. Interaction Design Overview: General principles for how users will interact with the interface.
+##### 4.4.14.4. Visual Design & Style Guide (Overview): Key elements of the visual design, such as color palette, typography, and iconography, or a reference to a detailed style guide.
+#### 4.4.15. Component Responsibility Collaborator (CRC) Cards: A collection of CRC cards for the key components, detailing their responsibilities and collaborators.
+#### 4.4.16. Sequence Diagrams: UML Sequence Diagrams for key scenarios to illustrate how components interact to fulfill a use case.
+#### 4.4.17. Logging and Monitoring
 - **Logging Strategy:** This section must detail the system-wide logging strategy.
   - **Log Levels:** The design must incorporate an 8-level logging system: Emergency, Alert, Critical, Error, Warning, Notice, Informational, Debug.
   - **Default Level:** The default logging level at application launch must be `NOTICE`.
@@ -87,28 +100,28 @@ The following outline should be used as the structure for any `*_architecture_sp
   - **Formatting:** Where possible, logs should be color-coded by severity level for improved readability.
 - **Monitoring Strategy:** Outline the approach for monitoring the system's health and performance, including key metrics to track.
 
-#### 4.3.18. Primary Dependencies
+#### 4.4.18. Primary Dependencies
 - **Dependency Identification:** This section must explicitly list the primary, high-impact dependencies for the project (e.g., web frameworks, database clients, core libraries).
 - **Rationale:** For each dependency, a clear rationale for its selection must be provided, including why it was chosen over viable alternatives.
 - **Source and Version:** The exact version number and source (e.g., `crates.io` version, git repository URL and branch/commit) must be specified for each dependency.
 - **Adherence to Preferred List:** The agent must adhere to the `agents/PREFERRED_DEPENDENCIES.md` guide. Any proposed dependency not on the preferred list requires explicit user approval, as per the general mandate.
 
-### 4.4. External Interfaces & Integrations
-#### 4.4.1. External System Interfaces: Descriptions of how the system interacts with external systems or APIs.
-#### 4.4.2. Third-Party Integrations: Details on any third-party services or libraries used.
-#### 4.4.3. API Specifications (External): High-level overview or references to detailed API documentation for external consumers.
+### 4.5. External Interfaces & Integrations
+#### 4.5.1. External System Interfaces: Descriptions of how the system interacts with external systems or APIs.
+#### 4.5.2. Third-Party Integrations: Details on any third-party services or libraries used.
+#### 4.5.3. API Specifications (External): High-level overview or references to detailed API documentation for external consumers.
 
-### 4.5. Constraints & Assumptions
-#### 4.5.1. Technical Constraints: Limitations imposed by existing infrastructure, technology, or budget.
-#### 4.5.2. Business Constraints: Limitations from business rules, legal, or compliance requirements.
-#### 4.5.3. Assumptions: Factors believed to be true for the project to succeed.
-#### 4.5.4. Dependencies: External factors or other projects that this project relies upon.
+### 4.6. Constraints & Assumptions
+#### 4.6.1. Technical Constraints: Limitations imposed by existing infrastructure, technology, or budget.
+#### 4.6.2. Business Constraints: Limitations from business rules, legal, or compliance requirements.
+#### 4.6.3. Assumptions: Factors believed to be true for the project to succeed.
+#### 4.6.4. Dependencies: External factors or other projects that this project relies upon.
 
-### 4.6. Verification & Validation
-#### 4.6.1. Acceptance Criteria: Specific conditions that must be met for a feature or the product to be considered complete.
-#### 4.6.2. Testability Considerations: How the architecture and design facilitate automated testing.
+### 4.7. Verification & Validation
+#### 4.7.1. Acceptance Criteria: Specific conditions that must be met for a feature or the product to be considered complete.
+#### 4.7.2. Testability Considerations: How the architecture and design facilitate automated testing.
 
-### 4.7. Appendices (Optional)
+### 4.8. Appendices (Optional)
 #### 4.7.1. Glossary of Terms
 #### 4.7.2. Detailed Diagrams (e.g., sequence diagrams, class diagrams)
 
