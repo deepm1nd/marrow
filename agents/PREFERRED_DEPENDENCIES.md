@@ -23,6 +23,7 @@
 - material-yew = { git = "https://github.com/constructableconcepts/material-yew", branch = "update-yew-0.21" } # Fork compatible with Yew 0.21.0
 
 ## WASM & Gloo
+- wasm-pack
 - wasm-bindgen
 - wasm-bindgen-futures
 - gloo-file
@@ -71,3 +72,4 @@
 
 ## Forbidden Dependencies
 - trunk
+- webpack
