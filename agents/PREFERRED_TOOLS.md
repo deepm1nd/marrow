@@ -6,6 +6,14 @@ This document defines the usage policy for all available tools, which are catego
 
 ---
 
+## 0. Agent Mode Applicability
+
+**IMPORTANT:** This document defines tools for agents operating in Autonomous Mode with direct execution capabilities.
+
+**For Agents in Advisory Mode:** If these tools are not available, refer to Section 4.6 of `agents/ADVISORY_MODE_GUIDE.md` for adaptation patterns. The same policies (Allowed, Requires Approval, Forbidden) apply conceptually - the agent must simply request equivalent information or actions from the user.
+
+---
+
 ## 1. Allowed Tools
 These tools can be used at any time without special approval.
 
@@ -24,7 +32,6 @@ These tools can be used at any time without special approval.
 - `view_image(url: str)`: Displays an image from a URL.
 - `run_in_bash_session`: Executes a shell command.
 - `create_file_with_block`: Creates a new file with specified content.
-- `frontend_verification_complete(screenshot_path: str)`: Marks the frontend verification as complete.
 
 ---
 
@@ -49,6 +56,7 @@ These tools are considered dangerous or require special caution. They are forbid
 - `request_code_review()`: Requests a review of current code changes.
 - `delete_file(filepath: str)`: Deletes a file.
 - `frontend_verification_instructions()`: Provides the standard procedure for visually verifying frontend changes.
+- `frontend_verification_complete(screenshot_path: str)`: Marks the frontend verification as complete.
 - `reset_all()`: Resets all code changes in the repository.
 - `restore_file(filepath: str)`: Restores a single file to its original state.
 - `read_pr_comments()`: Reads comments on a pull request.

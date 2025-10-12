@@ -11,6 +11,15 @@ The agent orchestrates a comprehensive development lifecycle, guiding a project 
 
 For detailed instructions on each phase, refer to the guides in the `agents/` directory.
 
+
+### 1.1. Agent Operating Modes
+
+This methodology supports agents operating in different modes based on their capabilities:
+
+- **1. Autonomous Mode:** Agents with direct file system access and command execution capabilities should follow all instructions as written, using the tools referenced throughout this documentation.
+
+- **2. Advisory Mode:** Agents without direct execution capabilities (such as conversational AI assistants) should refer to `agents/ADVISORY_MODE_GUIDE.md` for specific operational patterns while maintaining all mandates and quality standards defined in this document.
+
 ---
 
 ## 2. Core Mandates

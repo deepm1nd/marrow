@@ -4,6 +4,28 @@
 
 ---
 
+## 0. Agent Mode Adaptations
+
+### 0.1. For Agents in Advisory Mode
+If the agent cannot directly execute commands, it must adapt these rules as follows:
+
+**Command Execution Protocol (Advisory Mode):**
+1. Provide the exact command to be executed
+2. Explain what successful output should look like
+3. Request that the user execute the command
+4. Request that the user paste the complete, unmodified output
+5. Analyze the provided output according to Section 1.1 rules
+6. Provide next steps based on the analysis
+
+**Script Exclusivity Mandate (Advisory Mode):**
+- The agent must instruct the user to use only the specified scripts
+- The agent must not suggest alternative commands unless explicitly approved by the user
+- The agent must verify (through user-reported output) that correct scripts were used
+
+**All other rules in this document apply equally to both Autonomous and Advisory modes.**
+
+---
+
 ## 1. Command Execution Protocol
 
 ### 1.1. Command Output Verification
